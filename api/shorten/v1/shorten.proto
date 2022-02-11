@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package api.shorten.v1;
+
+option go_package = "url-shorten/api/shorten/v1;v1";
+
+service Shorten {
+	rpc CreateShortenURL (CreateShortenURLRequest) returns (CreateShortenURLReply);
+	rpc DeleteShortenURL (DeleteShortenURLRequest) returns (DeleteShortenURLReply);
+	rpc GetShortenURL (GetShortenURLRequest) returns (GetShortenURLReply);
+	rpc ListShortenURL (ListShortenURLRequest) returns (ListShortenURLReply);
+}
+
+message CreateShortenURLRequest {
+    string url = 1;
+}
+message CreateShortenURLReply {
+    string short_url = 1;
+}
+
+message DeleteShortenURLRequest {}
+message DeleteShortenURLReply {}
+
+message GetShortenURLRequest {}
+message GetShortenURLReply {}
+
+message ListShortenURLRequest {}
+message ListShortenURLReply {}
