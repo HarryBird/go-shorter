@@ -4,6 +4,8 @@ package api.shorten.v1;
 
 option go_package = "url-shorten/api/shorten/v1;v1";
 
+import "validate/validate.proto";
+
 service Shorten {
 	rpc CreateShortenURL (CreateShortenURLRequest) returns (CreateShortenURLReply);
 	rpc DeleteShortenURL (DeleteShortenURLRequest) returns (DeleteShortenURLReply);
@@ -12,7 +14,7 @@ service Shorten {
 }
 
 message CreateShortenURLRequest {
-    string url = 1;
+    string url = 1 [(validate.rules).string.pattern = "^(http|https)://"];
 }
 message CreateShortenURLReply {
     string short_url = 1;

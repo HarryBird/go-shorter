@@ -8,7 +8,11 @@ server:
 data:
   database:
     driver: mysql
-    source: root:root@tcp(127.0.0.1:3306)/test
+    source: root:root@tcp(127.0.0.1:3306)/url_shorter?charset=utf8mb4&parseTime=True&loc=Local
+    pool:
+      max_idle: 10
+      max_open: 100
+      max_life_time: 3600
   redis:
     addr: 127.0.0.1:6379
     read_timeout: 0.2s

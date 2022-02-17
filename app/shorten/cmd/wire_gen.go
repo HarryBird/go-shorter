@@ -9,7 +9,9 @@ package main
 import (
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"
+	"url-shorten/app/shorten/internal/biz"
 	"url-shorten/app/shorten/internal/conf"
+	"url-shorten/app/shorten/internal/data"
 	"url-shorten/app/shorten/internal/server"
 	"url-shorten/app/shorten/internal/service"
 )
@@ -17,10 +19,18 @@ import (
 // Injectors from wire.go:
 
 // initApp init kratos application.
-func initApp(confServer *conf.Server, data *conf.Data, logger log.Logger) (*kratos.App, func(), error) {
-	shortenService := service.NewShortenService()
+func initApp(confServer *conf.Server, confData *conf.Data, logger log.Logger) (*kratos.App, func(), error) {
+	db := data.NewDB(confData, logger)
+	dataData, cleanup, err := data.NewData(db, logger)
+	if err != nil {
+		return nil, nil, err
+	}
+	shortenRepo := data.NewShortenRepo(dataData, logger)
+	shortenCase := biz.NewShortenCase(shortenRepo, logger)
+	shortenService := service.NewShortenService(shortenCase, logger)
 	grpcServer := server.NewGRPCServer(confServer, shortenService, logger)
 	app := newApp(logger, grpcServer)
 	return app, func() {
+		cleanup()
 	}, nil
 }

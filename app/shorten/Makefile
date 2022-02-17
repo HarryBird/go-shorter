@@ -16,7 +16,9 @@ api:
  	       --go_out=paths=source_relative:$(API_PROTO_PATH) \
  	       --go-http_out=paths=source_relative:$(API_PROTO_PATH) \
  	       --go-grpc_out=paths=source_relative:$(API_PROTO_PATH) \
- 	       --openapi_out==paths=source_relative:$(API_PROTO_PATH) \
+ 	       --openapi_out=paths=source_relative:$(API_PROTO_PATH) \
+		   --validate_out=lang=go,paths=source_relative:$(API_PROTO_PATH) \
+		   --go-errors_out=paths=source_relative:$(API_PROTO_PATH) \
 	       $(API_PROTO_FILES)
 
 .PHONY: config
@@ -30,7 +32,7 @@ config:
 .PHONY: wire
 # wire
 wire:
-	cd cmd && wire
+	cd cmd && wire check && wire
 
 .PHONY: dao
 # dao

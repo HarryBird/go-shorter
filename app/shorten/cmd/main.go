@@ -6,6 +6,8 @@ import (
 
 	"url-shorten/app/shorten/internal/conf"
 
+	mzap "github.com/HarryBird/mo-kit/log/zap"
+	zlog "github.com/go-kratos/kratos/contrib/log/zap/v2"
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/config"
 	"github.com/go-kratos/kratos/v2/config/file"
@@ -45,9 +47,9 @@ func newApp(logger log.Logger, gs *grpc.Server) *kratos.App {
 
 func main() {
 	flag.Parse()
-	logger := log.With(log.NewStdLogger(os.Stdout),
-		"ts", log.DefaultTimestamp,
-		"caller", log.DefaultCaller,
+	logger := log.With(zlog.NewLogger(mzap.DevelopmentLogger()),
+		// "ts", log.DefaultTimestamp,
+		// "caller", log.DefaultCaller,
 		"service.id", id,
 		"service.name", Name,
 		"service.version", Version,
@@ -65,10 +67,16 @@ func main() {
 		panic(err)
 	}
 
+	// log := log.NewHelper(logger)
+	// vv, _ := c.Value("data.database.pool.max_idle").Int()
+	// log.Infof("config: %+v", vv)
+
 	var bc conf.Bootstrap
 	if err := c.Scan(&bc); err != nil {
 		panic(err)
 	}
+
+	// log.Infof("bootstrap: %v", bc)
 
 	app, cleanup, err := initApp(bc.Server, bc.Data, logger)
 	if err != nil {

@@ -27,8 +27,14 @@ message Server {
 
 message Data {
   message Database {
+    message Pool {
+        int32 max_idle = 1;
+        int32 max_open = 2;
+        int32 max_life_time = 3;
+    }
     string driver = 1;
     string source = 2;
+    Pool pool = 3;
   }
   message Redis {
     string network = 1;

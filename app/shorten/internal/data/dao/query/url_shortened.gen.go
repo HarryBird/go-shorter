@@ -28,13 +28,12 @@ func newURLShortened(db *gorm.DB) uRLShortened {
 	_uRLShortened.ID = field.NewInt64(tableName, "id")
 	_uRLShortened.URLFull = field.NewString(tableName, "url_full")
 	_uRLShortened.URLHost = field.NewString(tableName, "url_host")
-	_uRLShortened.URLPath = field.NewString(tableName, "url_path")
+	_uRLShortened.URLURI = field.NewString(tableName, "url_uri")
 	_uRLShortened.URLQuery = field.NewString(tableName, "url_query")
-	_uRLShortened.URLHash = field.NewInt64(tableName, "url_hash")
 	_uRLShortened.URLCode = field.NewString(tableName, "url_code")
-	_uRLShortened.Ctime = field.NewInt32(tableName, "ctime")
-	_uRLShortened.Mtime = field.NewInt32(tableName, "mtime")
-	_uRLShortened.Dtime = field.NewInt32(tableName, "dtime")
+	_uRLShortened.CreatedAt = field.NewInt64(tableName, "created_at")
+	_uRLShortened.UpdatedAt = field.NewInt64(tableName, "updated_at")
+	_uRLShortened.DeletedAt = field.NewInt64(tableName, "deleted_at")
 
 	_uRLShortened.fillFieldMap()
 
@@ -44,17 +43,16 @@ func newURLShortened(db *gorm.DB) uRLShortened {
 type uRLShortened struct {
 	uRLShortenedDo uRLShortenedDo
 
-	ALL      field.Field
-	ID       field.Int64
-	URLFull  field.String
-	URLHost  field.String
-	URLPath  field.String
-	URLQuery field.String
-	URLHash  field.Int64
-	URLCode  field.String
-	Ctime    field.Int32
-	Mtime    field.Int32
-	Dtime    field.Int32
+	ALL       field.Field
+	ID        field.Int64
+	URLFull   field.String
+	URLHost   field.String
+	URLURI    field.String
+	URLQuery  field.String
+	URLCode   field.String
+	CreatedAt field.Int64
+	UpdatedAt field.Int64
+	DeletedAt field.Int64
 
 	fieldMap map[string]field.Expr
 }
@@ -74,13 +72,12 @@ func (u *uRLShortened) updateTableName(table string) *uRLShortened {
 	u.ID = field.NewInt64(table, "id")
 	u.URLFull = field.NewString(table, "url_full")
 	u.URLHost = field.NewString(table, "url_host")
-	u.URLPath = field.NewString(table, "url_path")
+	u.URLURI = field.NewString(table, "url_uri")
 	u.URLQuery = field.NewString(table, "url_query")
-	u.URLHash = field.NewInt64(table, "url_hash")
 	u.URLCode = field.NewString(table, "url_code")
-	u.Ctime = field.NewInt32(table, "ctime")
-	u.Mtime = field.NewInt32(table, "mtime")
-	u.Dtime = field.NewInt32(table, "dtime")
+	u.CreatedAt = field.NewInt64(table, "created_at")
+	u.UpdatedAt = field.NewInt64(table, "updated_at")
+	u.DeletedAt = field.NewInt64(table, "deleted_at")
 
 	u.fillFieldMap()
 
@@ -103,17 +100,16 @@ func (u *uRLShortened) GetFieldByName(fieldName string) (field.OrderExpr, bool) 
 }
 
 func (u *uRLShortened) fillFieldMap() {
-	u.fieldMap = make(map[string]field.Expr, 10)
+	u.fieldMap = make(map[string]field.Expr, 9)
 	u.fieldMap["id"] = u.ID
 	u.fieldMap["url_full"] = u.URLFull
 	u.fieldMap["url_host"] = u.URLHost
-	u.fieldMap["url_path"] = u.URLPath
+	u.fieldMap["url_uri"] = u.URLURI
 	u.fieldMap["url_query"] = u.URLQuery
-	u.fieldMap["url_hash"] = u.URLHash
 	u.fieldMap["url_code"] = u.URLCode
-	u.fieldMap["ctime"] = u.Ctime
-	u.fieldMap["mtime"] = u.Mtime
-	u.fieldMap["dtime"] = u.Dtime
+	u.fieldMap["created_at"] = u.CreatedAt
+	u.fieldMap["updated_at"] = u.UpdatedAt
+	u.fieldMap["deleted_at"] = u.DeletedAt
 }
 
 func (u uRLShortened) clone(db *gorm.DB) uRLShortened {

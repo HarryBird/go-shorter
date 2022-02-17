@@ -8,16 +8,15 @@ const TableNameURLShortened = "url_shortened"
 
 // URLShortened mapped from table <url_shortened>
 type URLShortened struct {
-	ID       int64  `gorm:"column:id;primaryKey;autoIncrement:true" json:"id"`
-	URLFull  string `gorm:"column:url_full;not null" json:"url_full"`
-	URLHost  string `gorm:"column:url_host;not null" json:"url_host"`
-	URLPath  string `gorm:"column:url_path;not null" json:"url_path"`
-	URLQuery string `gorm:"column:url_query;not null" json:"url_query"`
-	URLHash  int64  `gorm:"column:url_hash;not null;default:0" json:"url_hash"`
-	URLCode  string `gorm:"column:url_code;not null" json:"url_code"`
-	Ctime    int32  `gorm:"column:ctime;not null;default:0" json:"ctime"`
-	Mtime    int32  `gorm:"column:mtime;not null;default:0" json:"mtime"`
-	Dtime    int32  `gorm:"column:dtime;not null;default:0" json:"dtime"`
+	ID        int64  `gorm:"column:id;primaryKey;autoIncrement:true" json:"id"`
+	URLFull   string `gorm:"column:url_full;not null" json:"url_full"`
+	URLHost   string `gorm:"column:url_host;not null" json:"url_host"`
+	URLURI    string `gorm:"column:url_uri;not null" json:"url_uri"`
+	URLQuery  string `gorm:"column:url_query;not null" json:"url_query"`
+	URLCode   string `gorm:"column:url_code;not null" json:"url_code"`
+	CreatedAt int64  `gorm:"column:created_at;not null" json:"created_at"`
+	UpdatedAt int64  `gorm:"column:updated_at;not null" json:"updated_at"`
+	DeletedAt int64  `gorm:"column:deleted_at;not null;default:0" json:"deleted_at"`
 }
 
 // TableName URLShortened's table name

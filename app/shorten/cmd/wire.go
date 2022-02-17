@@ -6,7 +6,9 @@
 package main
 
 import (
+	"url-shorten/app/shorten/internal/biz"
 	"url-shorten/app/shorten/internal/conf"
+	"url-shorten/app/shorten/internal/data"
 	"url-shorten/app/shorten/internal/server"
 	"url-shorten/app/shorten/internal/service"
 
@@ -17,6 +19,6 @@ import (
 
 // initApp init kratos application.
 func initApp(*conf.Server, *conf.Data, log.Logger) (*kratos.App, func(), error) {
-	// panic(wire.Build(server.ProviderSet, data.ProviderSet, biz.ProviderSet, service.ProviderSet, newApp))
-	panic(wire.Build(server.ProviderSet, service.ProviderSet, newApp))
+	panic(wire.Build(server.ProviderSet, data.ProviderSet, biz.ProviderSet, service.ProviderSet, newApp))
+	// panic(wire.Build(server.ProviderSet, service.ProviderSet, newApp))
 }
