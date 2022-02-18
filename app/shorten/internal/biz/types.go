@@ -11,6 +11,5 @@ type ShortenURL struct {
 	URLHost  string
 	URLUri   string
 	URLQuery string
-	URLHash  int64
 	URLCode  string
 }

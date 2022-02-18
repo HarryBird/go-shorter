@@ -2,6 +2,8 @@ package biz
 
 import (
 	"context"
+	"fmt"
+	"hash/crc64"
 	stdurl "net/url"
 	"strings"
 
@@ -22,7 +24,7 @@ type ShortenCase struct {
 }
 
 func NewShortenCase(repo ShortenRepo, logger log.Logger) *ShortenCase {
-	return &ShortenCase{repo: repo, log: log.NewHelper(log.With(logger, "module", "biz.shorten"))}
+	return &ShortenCase{repo: repo, log: log.NewHelper(log.With(logger, "mod", "biz.shorten"))}
 }
 
 func (uc *ShortenCase) Create(ctx context.Context, ourl OriginURL) (*ShortenURL, error) {
@@ -69,11 +71,25 @@ func (uc *ShortenCase) shorten(ctx context.Context, url string) (*ShortenURL, er
 
 func (uc *ShortenCase) hash(ctx context.Context, url string) string {
 	fname := "hash"
+
+	murHash := uc.murHash(ctx, url)
+	crcHash := uc.crcHash(ctx, url)
+	urlHash := fmt.Sprintf("%s.%s", murHash, crcHash)
+
+	uc.log.WithContext(ctx).Infof("%s after hash: murHash=%v, crcHash=%v, urlHash=%v",
+		msgr.W(fname), murHash, crcHash, urlHash)
+	return urlHash
+}
+
+func (uc *ShortenCase) murHash(ctx context.Context, url string) string {
 	hasher := m3.New64()
 	hasher.Write([]byte(url))
 	hashSum := hasher.Sum64()
-	hashCode := string(b62.FormatUint(hashSum))
+	return string(b62.FormatUint(hashSum))
+}
 
-	uc.log.WithContext(ctx).Infof("%s after murhash: hashSum=%d, hashCode=%s", msgr.W(fname), hashSum, hashCode)
-	return hashCode
+func (uc *ShortenCase) crcHash(ctx context.Context, url string) string {
+	hashSum := crc64.Checksum([]byte(url), crc64.MakeTable(crc64.ISO))
+	// 62^4 = 14776336 对 10000000 取模再转base62，使hash为4位62进制字符
+	return string(b62.FormatUint(hashSum % 10000000))
 }

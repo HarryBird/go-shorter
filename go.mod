@@ -3,7 +3,7 @@ module url-shorten
 go 1.17
 
 require (
-	github.com/HarryBird/mo-kit v0.0.0-20220217073943-dce4d9c3f868
+	github.com/HarryBird/mo-kit v0.0.0-20220218042541-1c244f4e96a6
 	github.com/envoyproxy/protoc-gen-validate v0.6.3
 	github.com/go-kratos/kratos/contrib/log/zap/v2 v2.0.0-20220215033000-471a2aab794b
 	github.com/go-kratos/kratos/v2 v2.1.5
@@ -20,10 +20,13 @@ require (
 )
 
 require (
+	github.com/cespare/xxhash/v2 v2.1.2 // indirect
+	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
 	github.com/fsnotify/fsnotify v1.4.9 // indirect
 	github.com/go-logr/logr v1.2.1 // indirect
 	github.com/go-logr/stdr v1.2.0 // indirect
 	github.com/go-playground/form/v4 v4.2.0 // indirect
+	github.com/go-redis/redis/v8 v8.11.4 // indirect
 	github.com/go-sql-driver/mysql v1.6.0 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/google/uuid v1.3.0 // indirect

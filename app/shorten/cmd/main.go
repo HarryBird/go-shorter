@@ -67,16 +67,16 @@ func main() {
 		panic(err)
 	}
 
-	// log := log.NewHelper(logger)
-	// vv, _ := c.Value("data.database.pool.max_idle").Int()
-	// log.Infof("config: %+v", vv)
+	slog := log.NewHelper(log.With(logger, "mod", "bootstrap"))
+	vv, _ := c.Value("data.redis.pool_timeout").Duration()
+	slog.Infof("config: %+v", vv)
 
 	var bc conf.Bootstrap
 	if err := c.Scan(&bc); err != nil {
 		panic(err)
 	}
 
-	// log.Infof("bootstrap: %v", bc)
+	slog.Infof("bootstrap config: %+v", bc)
 
 	app, cleanup, err := initApp(bc.Server, bc.Data, logger)
 	if err != nil {
