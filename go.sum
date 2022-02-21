@@ -17,6 +17,8 @@ github.com/HarryBird/mo-kit v0.0.0-20220218035902-dd374791616f h1:CnP45MQ7VWInAu
 github.com/HarryBird/mo-kit v0.0.0-20220218035902-dd374791616f/go.mod h1:/GizmCbhVqBU9PrN36gO2Q69ArVoAJpyZ1TYY9NsBdc=
 github.com/HarryBird/mo-kit v0.0.0-20220218042541-1c244f4e96a6 h1:658NPD2muP9N5h9OMuaIIA4A9D1eC5gShnDglX+eFyQ=
 github.com/HarryBird/mo-kit v0.0.0-20220218042541-1c244f4e96a6/go.mod h1:/GizmCbhVqBU9PrN36gO2Q69ArVoAJpyZ1TYY9NsBdc=
+github.com/HarryBird/mo-kit v0.0.0-20220221083232-c88e0719162b h1:wq2581xSdvmb1kUXuKBSjgh5+YL84BiCgayE+p032MU=
+github.com/HarryBird/mo-kit v0.0.0-20220221083232-c88e0719162b/go.mod h1:/GizmCbhVqBU9PrN36gO2Q69ArVoAJpyZ1TYY9NsBdc=
 github.com/Masterminds/semver/v3 v3.1.1/go.mod h1:VPu/7SZ7ePZ3QOrcuXROw5FAcLl4a0cBrbBpGY/8hQs=
 github.com/OneOfOne/xxhash v1.2.2/go.mod h1:HSdplMjZKSmBqAxg5vPj2TmRDmfkzw+cTzAElWljhcU=
 github.com/StackExchange/wmi v1.2.1/go.mod h1:rcmrprowKIVzvc+NUiLncP2uuArMWLCbu9SBzvHz7e8=

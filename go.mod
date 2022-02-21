@@ -3,7 +3,7 @@ module url-shorten
 go 1.17
 
 require (
-	github.com/HarryBird/mo-kit v0.0.0-20220218042541-1c244f4e96a6
+	github.com/HarryBird/mo-kit v0.0.0-20220221083232-c88e0719162b
 	github.com/envoyproxy/protoc-gen-validate v0.6.3
 	github.com/go-kratos/kratos/contrib/log/zap/v2 v2.0.0-20220215033000-471a2aab794b
 	github.com/go-kratos/kratos/v2 v2.1.5

@@ -11,6 +11,15 @@ service Shorten {
 	rpc DeleteShortenURL (DeleteShortenURLRequest) returns (DeleteShortenURLReply);
 	rpc GetShortenURL (GetShortenURLRequest) returns (GetShortenURLReply);
 	rpc ListShortenURL (ListShortenURLRequest) returns (ListShortenURLReply);
+	rpc DecodeShortenURL (DecodeShortenURLRequest) returns (DecodeShortenURLReply);
+}
+
+message DecodeShortenURLRequest {
+    string code = 1 [(validate.rules).string.min_len = 1];
+}
+
+message DecodeShortenURLReply {
+    string url_full = 1;
 }
 
 message CreateShortenURLRequest {

@@ -17,8 +17,26 @@ api:
  	       --go-http_out=paths=source_relative:$(API_PROTO_PATH) \
  	       --go-grpc_out=paths=source_relative:$(API_PROTO_PATH) \
  	       --openapi_out=paths=source_relative:$(API_PROTO_PATH) \
-		   --validate_out=lang=go,paths=source_relative:$(API_PROTO_PATH) \
+	       $(API_PROTO_FILES)
+
+.PHONY: error
+# generate error proto
+error:
+	protoc --proto_path=. \
+	       --proto_path=$(API_PROTO_PATH) \
+	       --proto_path=$(ROOT_PATH)/third_party \
+ 	       --go_out=paths=source_relative:$(API_PROTO_PATH) \
 		   --go-errors_out=paths=source_relative:$(API_PROTO_PATH) \
+	       $(API_PROTO_FILES)
+
+.PHONY: validate
+# generate validate proto
+validate:
+	protoc --proto_path=. \
+	       --proto_path=$(API_PROTO_PATH) \
+	       --proto_path=$(ROOT_PATH)/third_party \
+ 	       --go_out=paths=source_relative:$(API_PROTO_PATH) \
+		   --validate_out=lang=go,paths=source_relative:$(API_PROTO_PATH) \
 	       $(API_PROTO_FILES)
 
 .PHONY: config
@@ -28,6 +46,10 @@ config:
 	       --proto_path=$(ROOT_PATH)/third_party \
  	       --go_out=paths=source_relative:. \
 	       $(APP_PROTO_FILES)
+
+.PHONY: proto
+# generate all proto
+proto: api error validate config
 
 .PHONY: wire
 # wire
@@ -48,6 +70,11 @@ build:
 # run
 run:
 	./$(APP_BIN_PATH) -conf ./config
+
+.PHONY: air
+# run by air
+air:
+	air
 
 .PHONY: clean
 # clean

@@ -9,5 +9,7 @@ import "errors/errors.proto";
 enum ErrorReason {
   option (errors.default_code) = 500;
 
-  PARAM_INVALID = 0 [(errors.code) = 400];
+  CREATR_SHORTEN_URL_FAIL = 0 [(errors.code) = 500];
+  DECODE_SHORTEN_URL_FAIL = 1 [(errors.code) = 500];
+  SHORTEN_CODE_INVALID = 2 [(errors.code) = 400];
 }

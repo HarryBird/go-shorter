@@ -8,6 +8,7 @@ import (
 
 	"github.com/HarryBird/mo-kit/msgr"
 	"github.com/go-kratos/kratos/v2/log"
+	"github.com/go-redis/redis/v8"
 	"github.com/pkg/errors"
 	"gorm.io/gorm"
 )
@@ -24,6 +25,50 @@ func NewShortenRepo(data *Data, logger log.Logger) biz.ShortenRepo {
 		data: data,
 		log:  log.NewHelper(log.With(logger, "mod", "repo.shorten")),
 	}
+}
+
+func (r *shortenRepo) Decode(ctx context.Context, url *biz.ShortenURL) (*biz.ShortenURL, error) {
+	fname := "Decode"
+
+	key, ttl := RedisKeyShortenCodeToURL.extract(url.URLCode)
+	r.log.WithContext(ctx).Infof("%s try query from redis: key=%s", msgr.W(fname), key)
+	v, err := r.data.rdb.Get(ctx, key).Result()
+
+	if err == nil {
+		r.log.WithContext(ctx).Infof("%s query from redis: result=%s", msgr.W(fname), v)
+		return &biz.ShortenURL{URLFull: v}, nil
+	}
+
+	if err != redis.Nil {
+		r.log.WithContext(ctx).Errorf("%s query from redis fail: err=%v", msgr.W(fname), err)
+		return nil, errors.WithMessage(err, "repo: query shorten url from redis fail")
+	}
+
+	r.log.WithContext(ctx).Infof("%s query from redis: not found", msgr.W(fname))
+
+	dao := query.Use(r.data.db).URLShortened
+
+	r.log.WithContext(ctx).Infof("%s try query from db: code=%s", msgr.W(fname), url.URLCode)
+	shortenURL, err := dao.WithContext(ctx).Where(dao.URLCode.Eq(url.URLCode)).First()
+
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			r.log.WithContext(ctx).Warnf("%s query from db: not found", msgr.W(fname))
+			return nil, biz.ErrNotFoundFromDB
+		}
+
+		r.log.WithContext(ctx).Errorf("%s query from db fail: err=%v", msgr.W(fname), err)
+		return nil, errors.WithMessage(err, "repo: query shorten url by code fail")
+	}
+
+	r.log.WithContext(ctx).Infof("%s try write full url to redis : key=%s, val=%s, ttl=%v",
+		msgr.W(fname), key, shortenURL.URLFull, ttl)
+	if err := r.data.rdb.SetEX(ctx, key, shortenURL.URLFull, ttl).Err(); err != nil {
+		r.log.WithContext(ctx).Errorf("%s write full url to redis fail: err=%v", msgr.W(fname), err)
+		return nil, errors.WithMessage(err, "repo: write shorten url to redis fail")
+	}
+
+	return r.modelToBiz(ctx, shortenURL), nil
 }
 
 func (r *shortenRepo) Create(ctx context.Context, url *biz.ShortenURL) (*biz.ShortenURL, error) {

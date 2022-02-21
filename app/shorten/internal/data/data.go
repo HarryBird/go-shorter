@@ -52,7 +52,7 @@ func NewDB(conf *conf.Data, logger log.Logger) *gorm.DB {
 
 func NewRedis(conf *conf.Data, logger log.Logger) *redis.Client {
 	rlog := log.NewHelper(log.With(logger, "mod", "repo.redis"))
-	rdb, err := mredis.NewRedis(conf.Redis)
+	rdb, err := mredis.NewRedis(conf.Redis, logger)
 	if err != nil {
 		rlog.Fatalf("repo: failed opening connection to redis %v", err)
 	}

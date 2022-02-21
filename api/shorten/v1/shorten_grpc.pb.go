@@ -26,6 +26,7 @@ type ShortenClient interface {
 	DeleteShortenURL(ctx context.Context, in *DeleteShortenURLRequest, opts ...grpc.CallOption) (*DeleteShortenURLReply, error)
 	GetShortenURL(ctx context.Context, in *GetShortenURLRequest, opts ...grpc.CallOption) (*GetShortenURLReply, error)
 	ListShortenURL(ctx context.Context, in *ListShortenURLRequest, opts ...grpc.CallOption) (*ListShortenURLReply, error)
+	DecodeShortenURL(ctx context.Context, in *DecodeShortenURLRequest, opts ...grpc.CallOption) (*DecodeShortenURLReply, error)
 }
 
 type shortenClient struct {
@@ -72,6 +73,15 @@ func (c *shortenClient) ListShortenURL(ctx context.Context, in *ListShortenURLRe
 	return out, nil
 }
 
+func (c *shortenClient) DecodeShortenURL(ctx context.Context, in *DecodeShortenURLRequest, opts ...grpc.CallOption) (*DecodeShortenURLReply, error) {
+	out := new(DecodeShortenURLReply)
+	err := c.cc.Invoke(ctx, "/api.shorten.v1.Shorten/DecodeShortenURL", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ShortenServer is the server API for Shorten service.
 // All implementations must embed UnimplementedShortenServer
 // for forward compatibility
@@ -80,6 +90,7 @@ type ShortenServer interface {
 	DeleteShortenURL(context.Context, *DeleteShortenURLRequest) (*DeleteShortenURLReply, error)
 	GetShortenURL(context.Context, *GetShortenURLRequest) (*GetShortenURLReply, error)
 	ListShortenURL(context.Context, *ListShortenURLRequest) (*ListShortenURLReply, error)
+	DecodeShortenURL(context.Context, *DecodeShortenURLRequest) (*DecodeShortenURLReply, error)
 	mustEmbedUnimplementedShortenServer()
 }
 
@@ -98,6 +109,9 @@ func (UnimplementedShortenServer) GetShortenURL(context.Context, *GetShortenURLR
 }
 func (UnimplementedShortenServer) ListShortenURL(context.Context, *ListShortenURLRequest) (*ListShortenURLReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListShortenURL not implemented")
+}
+func (UnimplementedShortenServer) DecodeShortenURL(context.Context, *DecodeShortenURLRequest) (*DecodeShortenURLReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DecodeShortenURL not implemented")
 }
 func (UnimplementedShortenServer) mustEmbedUnimplementedShortenServer() {}
 
@@ -184,6 +198,24 @@ func _Shorten_ListShortenURL_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Shorten_DecodeShortenURL_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DecodeShortenURLRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ShortenServer).DecodeShortenURL(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.shorten.v1.Shorten/DecodeShortenURL",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ShortenServer).DecodeShortenURL(ctx, req.(*DecodeShortenURLRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Shorten_ServiceDesc is the grpc.ServiceDesc for Shorten service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -206,6 +238,10 @@ var Shorten_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListShortenURL",
 			Handler:    _Shorten_ListShortenURL_Handler,
+		},
+		{
+			MethodName: "DecodeShortenURL",
+			Handler:    _Shorten_DecodeShortenURL_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

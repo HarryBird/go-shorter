@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"errors"
 
 	"github.com/go-kratos/kratos/v2/log"
 
@@ -30,8 +31,35 @@ func (s *ShortenService) logRequest(ctx context.Context, fname string, req inter
 }
 
 func (s *ShortenService) logResponse(ctx context.Context, fname string, resp interface{}) {
-	s.log.WithContext(ctx).Info("%s Request End...", msgr.W(fname))
+	s.log.WithContext(ctx).Infof("%s Request End...", msgr.W(fname))
 	s.log.WithContext(ctx).Debugf("%s Response: %+v", msgr.W(fname), resp)
+}
+
+func (s *ShortenService) DecodeShortenURL(ctx context.Context, req *pb.DecodeShortenURLRequest) (*pb.DecodeShortenURLReply, error) {
+	var (
+		fname = "DecodeShortenURL"
+		resp  = &pb.DecodeShortenURLReply{}
+	)
+
+	s.logRequest(ctx, fname, req)
+	surl, err := s.uc.Decode(ctx, &biz.ShortenURL{URLCode: req.Code})
+
+	if err != nil {
+		if errors.Is(err, biz.ErrNotFoundFromDB) {
+			return nil, pb.ErrorShortenCodeInvalid("%s", "invalid shorten code")
+		}
+
+		s.log.WithContext(ctx).Errorf("%s decode shorten url fail: %v", msgr.W(fname), err)
+		s.log.WithContext(ctx).Errorf("%s error stack=%+v", msgr.W(fname), err)
+		return nil, pb.ErrorDecodeShortenUrlFail("%s", "decode shorten code fail")
+	}
+
+	resp = &pb.DecodeShortenURLReply{
+		UrlFull: surl.URLFull,
+	}
+	s.logResponse(ctx, fname, resp)
+
+	return resp, nil
 }
 
 func (s *ShortenService) CreateShortenURL(ctx context.Context, req *pb.CreateShortenURLRequest) (*pb.CreateShortenURLReply, error) {
@@ -46,7 +74,7 @@ func (s *ShortenService) CreateShortenURL(ctx context.Context, req *pb.CreateSho
 	if err != nil {
 		s.log.WithContext(ctx).Errorf("%s create shorten url fail: %v", msgr.W(fname), err)
 		s.log.WithContext(ctx).Errorf("%s error stack=%+v", msgr.W(fname), err)
-		return nil, err
+		return nil, pb.ErrorCreatrShortenUrlFail("%s", "create shorten url fail")
 	}
 
 	resp = &pb.CreateShortenURLReply{

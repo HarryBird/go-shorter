@@ -16,6 +16,7 @@ import (
 
 type ShortenRepo interface {
 	Create(ctx context.Context, url *ShortenURL) (*ShortenURL, error)
+	Decode(ctx context.Context, url *ShortenURL) (*ShortenURL, error)
 }
 
 type ShortenCase struct {
@@ -25,6 +26,10 @@ type ShortenCase struct {
 
 func NewShortenCase(repo ShortenRepo, logger log.Logger) *ShortenCase {
 	return &ShortenCase{repo: repo, log: log.NewHelper(log.With(logger, "mod", "biz.shorten"))}
+}
+
+func (uc *ShortenCase) Decode(ctx context.Context, surl *ShortenURL) (*ShortenURL, error) {
+	return uc.repo.Decode(ctx, surl)
 }
 
 func (uc *ShortenCase) Create(ctx context.Context, ourl OriginURL) (*ShortenURL, error) {

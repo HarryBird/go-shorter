@@ -35,6 +35,223 @@ var (
 	_ = sort.Sort
 )
 
+// Validate checks the field values on DecodeShortenURLRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *DecodeShortenURLRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on DecodeShortenURLRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// DecodeShortenURLRequestMultiError, or nil if none found.
+func (m *DecodeShortenURLRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *DecodeShortenURLRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if utf8.RuneCountInString(m.GetCode()) < 1 {
+		err := DecodeShortenURLRequestValidationError{
+			field:  "Code",
+			reason: "value length must be at least 1 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if len(errors) > 0 {
+		return DecodeShortenURLRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// DecodeShortenURLRequestMultiError is an error wrapping multiple validation
+// errors returned by DecodeShortenURLRequest.ValidateAll() if the designated
+// constraints aren't met.
+type DecodeShortenURLRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m DecodeShortenURLRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m DecodeShortenURLRequestMultiError) AllErrors() []error { return m }
+
+// DecodeShortenURLRequestValidationError is the validation error returned by
+// DecodeShortenURLRequest.Validate if the designated constraints aren't met.
+type DecodeShortenURLRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e DecodeShortenURLRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e DecodeShortenURLRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e DecodeShortenURLRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e DecodeShortenURLRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e DecodeShortenURLRequestValidationError) ErrorName() string {
+	return "DecodeShortenURLRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e DecodeShortenURLRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sDecodeShortenURLRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = DecodeShortenURLRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = DecodeShortenURLRequestValidationError{}
+
+// Validate checks the field values on DecodeShortenURLReply with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *DecodeShortenURLReply) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on DecodeShortenURLReply with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// DecodeShortenURLReplyMultiError, or nil if none found.
+func (m *DecodeShortenURLReply) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *DecodeShortenURLReply) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for UrlFull
+
+	if len(errors) > 0 {
+		return DecodeShortenURLReplyMultiError(errors)
+	}
+
+	return nil
+}
+
+// DecodeShortenURLReplyMultiError is an error wrapping multiple validation
+// errors returned by DecodeShortenURLReply.ValidateAll() if the designated
+// constraints aren't met.
+type DecodeShortenURLReplyMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m DecodeShortenURLReplyMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m DecodeShortenURLReplyMultiError) AllErrors() []error { return m }
+
+// DecodeShortenURLReplyValidationError is the validation error returned by
+// DecodeShortenURLReply.Validate if the designated constraints aren't met.
+type DecodeShortenURLReplyValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e DecodeShortenURLReplyValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e DecodeShortenURLReplyValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e DecodeShortenURLReplyValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e DecodeShortenURLReplyValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e DecodeShortenURLReplyValidationError) ErrorName() string {
+	return "DecodeShortenURLReplyValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e DecodeShortenURLReplyValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sDecodeShortenURLReply.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = DecodeShortenURLReplyValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = DecodeShortenURLReplyValidationError{}
+
 // Validate checks the field values on CreateShortenURLRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
