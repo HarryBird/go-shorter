@@ -10,6 +10,7 @@ import (
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-redis/redis/v8"
 	"github.com/pkg/errors"
+	"github.com/spf13/cast"
 	"gorm.io/gorm"
 )
 
@@ -25,6 +26,61 @@ func NewShortenRepo(data *Data, logger log.Logger) biz.ShortenRepo {
 		data: data,
 		log:  log.NewHelper(log.With(logger, "mod", "repo.shorten")),
 	}
+}
+
+func (r *shortenRepo) Get(ctx context.Context, opts ...query.Option) (*biz.ShortenURL, error) {
+	// fname := "Get"
+
+	url, err := r.queryRow(ctx, opts...)
+
+	if err != nil {
+		if err == biz.ErrNotFoundFromDB {
+			return nil, err
+		}
+
+		return nil, errors.WithMessage(err, "repo: get url shorten fail")
+	}
+
+	return r.modelToBiz(ctx, url), nil
+}
+
+func (r *shortenRepo) queryRow(ctx context.Context, opts ...query.Option) (*model.URLShortened, error) {
+	fname := "queryRow"
+	cond, err := r.applyQueryOption(ctx, opts...)
+
+	if err != nil {
+		return nil, errors.WithMessage(err, "repo: query row fail by applyQueryOption")
+	}
+
+	url, err := query.UseCondition(ctx, r.data.db, cond).First()
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			r.log.WithContext(ctx).Warnf("%s query row from db: not found", msgr.W(fname))
+			return nil, biz.ErrNotFoundFromDB
+		}
+
+		r.log.WithContext(ctx).Errorf("%s query row from db fail: err=%v", msgr.W(fname), err)
+		return nil, errors.WithMessage(err, "repo: query row fail by db")
+	}
+
+	return url, nil
+}
+
+func (r *shortenRepo) applyQueryOption(ctx context.Context, opts ...query.Option) (*query.Condition, error) {
+	fname := "applyQueryOption"
+
+	if len(opts) == 0 {
+		return nil, errors.WithMessage(biz.ErrParamInvalid, "repo: apply query option fail")
+	}
+
+	qo := query.NewCondition()
+
+	for _, opt := range opts {
+		opt(qo)
+	}
+
+	r.log.WithContext(ctx).Infof("%s query option detail: %+v", msgr.W(fname), qo)
+	return qo, nil
 }
 
 func (r *shortenRepo) Decode(ctx context.Context, url *biz.ShortenURL) (*biz.ShortenURL, error) {
@@ -102,6 +158,22 @@ func (r *shortenRepo) Create(ctx context.Context, url *biz.ShortenURL) (*biz.Sho
 	return nil, errors.WithMessage(err, "repo: query shorten url existed fail")
 }
 
+func (r *shortenRepo) WithID(id int64) query.Option {
+	return func(o *query.Condition) { o.Where.Id = id }
+}
+
+func (r *shortenRepo) WithCode(code string) query.Option {
+	return func(o *query.Condition) { o.Where.Code = code }
+}
+
+func (r *shortenRepo) WithOffset(offset int64) query.Option {
+	return func(o *query.Condition) { o.Paging.Offset = cast.ToInt(offset) }
+}
+
+func (r *shortenRepo) WithLimit(limit int64) query.Option {
+	return func(o *query.Condition) { o.Paging.Limit = cast.ToInt(limit) }
+}
+
 func (r *shortenRepo) create(ctx context.Context, url *biz.ShortenURL) (*model.URLShortened, error) {
 	fname := "create"
 	dao := query.Use(r.data.db).URLShortened
@@ -131,6 +203,7 @@ func (r *shortenRepo) bizToModel(ctx context.Context, url *biz.ShortenURL) *mode
 
 func (r *shortenRepo) modelToBiz(ctx context.Context, url *model.URLShortened) *biz.ShortenURL {
 	return &biz.ShortenURL{
+		ID:       url.ID,
 		URLFull:  url.URLFull,
 		URLHost:  url.URLHost,
 		URLUri:   url.URLURI,

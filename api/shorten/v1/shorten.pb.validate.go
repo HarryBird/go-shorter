@@ -35,6 +35,630 @@ var (
 	_ = sort.Sort
 )
 
+// Validate checks the field values on ShortenURL with the rules defined in the
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *ShortenURL) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ShortenURL with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in ShortenURLMultiError, or
+// nil if none found.
+func (m *ShortenURL) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ShortenURL) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Id
+
+	// no validation rules for UrlFull
+
+	// no validation rules for UrlCode
+
+	if len(errors) > 0 {
+		return ShortenURLMultiError(errors)
+	}
+
+	return nil
+}
+
+// ShortenURLMultiError is an error wrapping multiple validation errors
+// returned by ShortenURL.ValidateAll() if the designated constraints aren't met.
+type ShortenURLMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ShortenURLMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ShortenURLMultiError) AllErrors() []error { return m }
+
+// ShortenURLValidationError is the validation error returned by
+// ShortenURL.Validate if the designated constraints aren't met.
+type ShortenURLValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ShortenURLValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ShortenURLValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ShortenURLValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ShortenURLValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ShortenURLValidationError) ErrorName() string { return "ShortenURLValidationError" }
+
+// Error satisfies the builtin error interface
+func (e ShortenURLValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sShortenURL.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ShortenURLValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ShortenURLValidationError{}
+
+// Validate checks the field values on CreateShortenURLRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *CreateShortenURLRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on CreateShortenURLRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// CreateShortenURLRequestMultiError, or nil if none found.
+func (m *CreateShortenURLRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *CreateShortenURLRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if !_CreateShortenURLRequest_Url_Pattern.MatchString(m.GetUrl()) {
+		err := CreateShortenURLRequestValidationError{
+			field:  "Url",
+			reason: "value does not match regex pattern \"^(http|https)://\"",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if len(errors) > 0 {
+		return CreateShortenURLRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// CreateShortenURLRequestMultiError is an error wrapping multiple validation
+// errors returned by CreateShortenURLRequest.ValidateAll() if the designated
+// constraints aren't met.
+type CreateShortenURLRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m CreateShortenURLRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m CreateShortenURLRequestMultiError) AllErrors() []error { return m }
+
+// CreateShortenURLRequestValidationError is the validation error returned by
+// CreateShortenURLRequest.Validate if the designated constraints aren't met.
+type CreateShortenURLRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e CreateShortenURLRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e CreateShortenURLRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e CreateShortenURLRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e CreateShortenURLRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e CreateShortenURLRequestValidationError) ErrorName() string {
+	return "CreateShortenURLRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e CreateShortenURLRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sCreateShortenURLRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = CreateShortenURLRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = CreateShortenURLRequestValidationError{}
+
+var _CreateShortenURLRequest_Url_Pattern = regexp.MustCompile("^(http|https)://")
+
+// Validate checks the field values on CreateShortenURLReply with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *CreateShortenURLReply) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on CreateShortenURLReply with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// CreateShortenURLReplyMultiError, or nil if none found.
+func (m *CreateShortenURLReply) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *CreateShortenURLReply) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if all {
+		switch v := interface{}(m.GetShortenUrl()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, CreateShortenURLReplyValidationError{
+					field:  "ShortenUrl",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, CreateShortenURLReplyValidationError{
+					field:  "ShortenUrl",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetShortenUrl()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return CreateShortenURLReplyValidationError{
+				field:  "ShortenUrl",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if len(errors) > 0 {
+		return CreateShortenURLReplyMultiError(errors)
+	}
+
+	return nil
+}
+
+// CreateShortenURLReplyMultiError is an error wrapping multiple validation
+// errors returned by CreateShortenURLReply.ValidateAll() if the designated
+// constraints aren't met.
+type CreateShortenURLReplyMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m CreateShortenURLReplyMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m CreateShortenURLReplyMultiError) AllErrors() []error { return m }
+
+// CreateShortenURLReplyValidationError is the validation error returned by
+// CreateShortenURLReply.Validate if the designated constraints aren't met.
+type CreateShortenURLReplyValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e CreateShortenURLReplyValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e CreateShortenURLReplyValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e CreateShortenURLReplyValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e CreateShortenURLReplyValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e CreateShortenURLReplyValidationError) ErrorName() string {
+	return "CreateShortenURLReplyValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e CreateShortenURLReplyValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sCreateShortenURLReply.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = CreateShortenURLReplyValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = CreateShortenURLReplyValidationError{}
+
+// Validate checks the field values on GetShortenURLRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *GetShortenURLRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on GetShortenURLRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// GetShortenURLRequestMultiError, or nil if none found.
+func (m *GetShortenURLRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *GetShortenURLRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	switch m.Query.(type) {
+
+	case *GetShortenURLRequest_Id:
+
+		if m.GetId() <= 0 {
+			err := GetShortenURLRequestValidationError{
+				field:  "Id",
+				reason: "value must be greater than 0",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
+	case *GetShortenURLRequest_Code:
+
+		if utf8.RuneCountInString(m.GetCode()) < 5 {
+			err := GetShortenURLRequestValidationError{
+				field:  "Code",
+				reason: "value length must be at least 5 runes",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
+	default:
+		err := GetShortenURLRequestValidationError{
+			field:  "Query",
+			reason: "value is required",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+
+	}
+
+	if len(errors) > 0 {
+		return GetShortenURLRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// GetShortenURLRequestMultiError is an error wrapping multiple validation
+// errors returned by GetShortenURLRequest.ValidateAll() if the designated
+// constraints aren't met.
+type GetShortenURLRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m GetShortenURLRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m GetShortenURLRequestMultiError) AllErrors() []error { return m }
+
+// GetShortenURLRequestValidationError is the validation error returned by
+// GetShortenURLRequest.Validate if the designated constraints aren't met.
+type GetShortenURLRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e GetShortenURLRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e GetShortenURLRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e GetShortenURLRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e GetShortenURLRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e GetShortenURLRequestValidationError) ErrorName() string {
+	return "GetShortenURLRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e GetShortenURLRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sGetShortenURLRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = GetShortenURLRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = GetShortenURLRequestValidationError{}
+
+// Validate checks the field values on GetShortenURLReply with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *GetShortenURLReply) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on GetShortenURLReply with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// GetShortenURLReplyMultiError, or nil if none found.
+func (m *GetShortenURLReply) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *GetShortenURLReply) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if all {
+		switch v := interface{}(m.GetShortenUrl()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, GetShortenURLReplyValidationError{
+					field:  "ShortenUrl",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, GetShortenURLReplyValidationError{
+					field:  "ShortenUrl",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetShortenUrl()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return GetShortenURLReplyValidationError{
+				field:  "ShortenUrl",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if len(errors) > 0 {
+		return GetShortenURLReplyMultiError(errors)
+	}
+
+	return nil
+}
+
+// GetShortenURLReplyMultiError is an error wrapping multiple validation errors
+// returned by GetShortenURLReply.ValidateAll() if the designated constraints
+// aren't met.
+type GetShortenURLReplyMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m GetShortenURLReplyMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m GetShortenURLReplyMultiError) AllErrors() []error { return m }
+
+// GetShortenURLReplyValidationError is the validation error returned by
+// GetShortenURLReply.Validate if the designated constraints aren't met.
+type GetShortenURLReplyValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e GetShortenURLReplyValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e GetShortenURLReplyValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e GetShortenURLReplyValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e GetShortenURLReplyValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e GetShortenURLReplyValidationError) ErrorName() string {
+	return "GetShortenURLReplyValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e GetShortenURLReplyValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sGetShortenURLReply.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = GetShortenURLReplyValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = GetShortenURLReplyValidationError{}
+
 // Validate checks the field values on DecodeShortenURLRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
@@ -57,10 +681,10 @@ func (m *DecodeShortenURLRequest) validate(all bool) error {
 
 	var errors []error
 
-	if utf8.RuneCountInString(m.GetCode()) < 1 {
+	if utf8.RuneCountInString(m.GetCode()) < 5 {
 		err := DecodeShortenURLRequestValidationError{
 			field:  "Code",
-			reason: "value length must be at least 1 runes",
+			reason: "value length must be at least 5 runes",
 		}
 		if !all {
 			return err
@@ -251,225 +875,6 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = DecodeShortenURLReplyValidationError{}
-
-// Validate checks the field values on CreateShortenURLRequest with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
-func (m *CreateShortenURLRequest) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on CreateShortenURLRequest with the
-// rules defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// CreateShortenURLRequestMultiError, or nil if none found.
-func (m *CreateShortenURLRequest) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *CreateShortenURLRequest) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	if !_CreateShortenURLRequest_Url_Pattern.MatchString(m.GetUrl()) {
-		err := CreateShortenURLRequestValidationError{
-			field:  "Url",
-			reason: "value does not match regex pattern \"^(http|https)://\"",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if len(errors) > 0 {
-		return CreateShortenURLRequestMultiError(errors)
-	}
-
-	return nil
-}
-
-// CreateShortenURLRequestMultiError is an error wrapping multiple validation
-// errors returned by CreateShortenURLRequest.ValidateAll() if the designated
-// constraints aren't met.
-type CreateShortenURLRequestMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m CreateShortenURLRequestMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m CreateShortenURLRequestMultiError) AllErrors() []error { return m }
-
-// CreateShortenURLRequestValidationError is the validation error returned by
-// CreateShortenURLRequest.Validate if the designated constraints aren't met.
-type CreateShortenURLRequestValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e CreateShortenURLRequestValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e CreateShortenURLRequestValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e CreateShortenURLRequestValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e CreateShortenURLRequestValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e CreateShortenURLRequestValidationError) ErrorName() string {
-	return "CreateShortenURLRequestValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e CreateShortenURLRequestValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sCreateShortenURLRequest.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = CreateShortenURLRequestValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = CreateShortenURLRequestValidationError{}
-
-var _CreateShortenURLRequest_Url_Pattern = regexp.MustCompile("^(http|https)://")
-
-// Validate checks the field values on CreateShortenURLReply with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
-func (m *CreateShortenURLReply) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on CreateShortenURLReply with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// CreateShortenURLReplyMultiError, or nil if none found.
-func (m *CreateShortenURLReply) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *CreateShortenURLReply) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	// no validation rules for ShortUrl
-
-	if len(errors) > 0 {
-		return CreateShortenURLReplyMultiError(errors)
-	}
-
-	return nil
-}
-
-// CreateShortenURLReplyMultiError is an error wrapping multiple validation
-// errors returned by CreateShortenURLReply.ValidateAll() if the designated
-// constraints aren't met.
-type CreateShortenURLReplyMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m CreateShortenURLReplyMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m CreateShortenURLReplyMultiError) AllErrors() []error { return m }
-
-// CreateShortenURLReplyValidationError is the validation error returned by
-// CreateShortenURLReply.Validate if the designated constraints aren't met.
-type CreateShortenURLReplyValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e CreateShortenURLReplyValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e CreateShortenURLReplyValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e CreateShortenURLReplyValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e CreateShortenURLReplyValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e CreateShortenURLReplyValidationError) ErrorName() string {
-	return "CreateShortenURLReplyValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e CreateShortenURLReplyValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sCreateShortenURLReply.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = CreateShortenURLReplyValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = CreateShortenURLReplyValidationError{}
 
 // Validate checks the field values on DeleteShortenURLRequest with the rules
 // defined in the proto definition for this message. If any rules are
@@ -674,210 +1079,6 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = DeleteShortenURLReplyValidationError{}
-
-// Validate checks the field values on GetShortenURLRequest with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
-func (m *GetShortenURLRequest) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on GetShortenURLRequest with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// GetShortenURLRequestMultiError, or nil if none found.
-func (m *GetShortenURLRequest) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *GetShortenURLRequest) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	if len(errors) > 0 {
-		return GetShortenURLRequestMultiError(errors)
-	}
-
-	return nil
-}
-
-// GetShortenURLRequestMultiError is an error wrapping multiple validation
-// errors returned by GetShortenURLRequest.ValidateAll() if the designated
-// constraints aren't met.
-type GetShortenURLRequestMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m GetShortenURLRequestMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m GetShortenURLRequestMultiError) AllErrors() []error { return m }
-
-// GetShortenURLRequestValidationError is the validation error returned by
-// GetShortenURLRequest.Validate if the designated constraints aren't met.
-type GetShortenURLRequestValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e GetShortenURLRequestValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e GetShortenURLRequestValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e GetShortenURLRequestValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e GetShortenURLRequestValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e GetShortenURLRequestValidationError) ErrorName() string {
-	return "GetShortenURLRequestValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e GetShortenURLRequestValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sGetShortenURLRequest.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = GetShortenURLRequestValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = GetShortenURLRequestValidationError{}
-
-// Validate checks the field values on GetShortenURLReply with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
-func (m *GetShortenURLReply) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on GetShortenURLReply with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// GetShortenURLReplyMultiError, or nil if none found.
-func (m *GetShortenURLReply) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *GetShortenURLReply) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	if len(errors) > 0 {
-		return GetShortenURLReplyMultiError(errors)
-	}
-
-	return nil
-}
-
-// GetShortenURLReplyMultiError is an error wrapping multiple validation errors
-// returned by GetShortenURLReply.ValidateAll() if the designated constraints
-// aren't met.
-type GetShortenURLReplyMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m GetShortenURLReplyMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m GetShortenURLReplyMultiError) AllErrors() []error { return m }
-
-// GetShortenURLReplyValidationError is the validation error returned by
-// GetShortenURLReply.Validate if the designated constraints aren't met.
-type GetShortenURLReplyValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e GetShortenURLReplyValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e GetShortenURLReplyValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e GetShortenURLReplyValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e GetShortenURLReplyValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e GetShortenURLReplyValidationError) ErrorName() string {
-	return "GetShortenURLReplyValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e GetShortenURLReplyValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sGetShortenURLReply.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = GetShortenURLReplyValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = GetShortenURLReplyValidationError{}
 
 // Validate checks the field values on ListShortenURLRequest with the rules
 // defined in the proto definition for this message. If any rules are

@@ -9,7 +9,7 @@ import (
 	pb "url-shorten/api/shorten/v1"
 	"url-shorten/app/shorten/internal/biz"
 
-	"github.com/HarryBird/mo-kit/msgr"
+	mlog "github.com/HarryBird/mo-kit/kratos/log/app"
 )
 
 type ShortenService struct {
@@ -25,23 +25,13 @@ func NewShortenService(uc *biz.ShortenCase, logger log.Logger) *ShortenService {
 		log: log.NewHelper(log.With(logger, "mod", "service.shorten"))}
 }
 
-func (s *ShortenService) logRequest(ctx context.Context, fname string, req interface{}) {
-	s.log.WithContext(ctx).Infof("%s Request Begin...", msgr.W(fname))
-	s.log.WithContext(ctx).Debugf("%s Request Param: %+v", msgr.W(fname), req)
-}
-
-func (s *ShortenService) logResponse(ctx context.Context, fname string, resp interface{}) {
-	s.log.WithContext(ctx).Infof("%s Request End...", msgr.W(fname))
-	s.log.WithContext(ctx).Debugf("%s Response: %+v", msgr.W(fname), resp)
-}
-
-func (s *ShortenService) DecodeShortenURL(ctx context.Context, req *pb.DecodeShortenURLRequest) (*pb.DecodeShortenURLReply, error) {
+func (s *ShortenService) DecodeShortenURL(ctx context.Context,
+	req *pb.DecodeShortenURLRequest) (*pb.DecodeShortenURLReply, error) {
 	var (
 		fname = "DecodeShortenURL"
-		resp  = &pb.DecodeShortenURLReply{}
 	)
 
-	s.logRequest(ctx, fname, req)
+	mlog.LogRequest(ctx, s.log, fname, req)
 	surl, err := s.uc.Decode(ctx, &biz.ShortenURL{URLCode: req.Code})
 
 	if err != nil {
@@ -49,48 +39,89 @@ func (s *ShortenService) DecodeShortenURL(ctx context.Context, req *pb.DecodeSho
 			return nil, pb.ErrorShortenCodeInvalid("%s", "invalid shorten code")
 		}
 
-		s.log.WithContext(ctx).Errorf("%s decode shorten url fail: %v", msgr.W(fname), err)
-		s.log.WithContext(ctx).Errorf("%s error stack=%+v", msgr.W(fname), err)
+		mlog.LogErrorStack(ctx, s.log, fname, err)
 		return nil, pb.ErrorDecodeShortenUrlFail("%s", "decode shorten code fail")
 	}
 
-	resp = &pb.DecodeShortenURLReply{
+	resp := &pb.DecodeShortenURLReply{
 		UrlFull: surl.URLFull,
 	}
-	s.logResponse(ctx, fname, resp)
+	mlog.LogResponse(ctx, s.log, fname, resp)
 
 	return resp, nil
 }
 
-func (s *ShortenService) CreateShortenURL(ctx context.Context, req *pb.CreateShortenURLRequest) (*pb.CreateShortenURLReply, error) {
+func (s *ShortenService) CreateShortenURL(ctx context.Context,
+	req *pb.CreateShortenURLRequest) (*pb.CreateShortenURLReply, error) {
 	var (
 		fname = "CreateShortenURL"
-		resp  = &pb.CreateShortenURLReply{}
+		resp  = new(pb.CreateShortenURLReply)
 	)
 
-	s.logRequest(ctx, fname, req)
+	mlog.LogRequest(ctx, s.log, fname, req)
 
-	surl, err := s.uc.Create(ctx, biz.OriginURL{Url: req.Url})
+	url, err := s.uc.Create(ctx, &biz.ShortenURL{URLFull: req.Url})
 	if err != nil {
-		s.log.WithContext(ctx).Errorf("%s create shorten url fail: %v", msgr.W(fname), err)
-		s.log.WithContext(ctx).Errorf("%s error stack=%+v", msgr.W(fname), err)
+		mlog.LogErrorStack(ctx, s.log, fname, err)
 		return nil, pb.ErrorCreatrShortenUrlFail("%s", "create shorten url fail")
 	}
 
-	resp = &pb.CreateShortenURLReply{
-		ShortUrl: "https://localhost/" + surl.URLCode,
+	resp.ShortenUrl = &pb.ShortenURL{
+		Id:      url.ID,
+		UrlFull: url.URLFull,
+		UrlCode: url.URLCode,
 	}
 
-	s.logResponse(ctx, fname, resp)
+	mlog.LogResponse(ctx, s.log, fname, resp)
 
 	return resp, nil
 }
-func (s *ShortenService) DeleteShortenURL(ctx context.Context, req *pb.DeleteShortenURLRequest) (*pb.DeleteShortenURLReply, error) {
+
+func (s *ShortenService) GetShortenURL(ctx context.Context, req *pb.GetShortenURLRequest) (*pb.GetShortenURLReply,
+	error) {
+	var (
+		fname = "GetShortenURL"
+		resp  = new(pb.GetShortenURLReply)
+	)
+
+	mlog.LogRequest(ctx, s.log, fname, req)
+
+	url, err := s.uc.Get(ctx, &biz.ShortenURL{
+		ID:      req.GetId(),
+		URLCode: req.GetCode(),
+	})
+
+	if err != nil {
+		if errors.Is(err, biz.ErrNotFoundFromDB) {
+			if req.GetId() > 0 {
+				return nil, pb.ErrorShortenIdInvalid("%s", "invalid shorten id")
+			}
+
+			if req.GetCode() != "" {
+				return nil, pb.ErrorShortenCodeInvalid("%s", "invalid shorten code")
+			}
+		}
+
+		mlog.LogErrorStack(ctx, s.log, fname, err)
+		return nil, pb.ErrorGetShortenUrlFail("%s", "get shorten url fail")
+	}
+
+	resp.ShortenUrl = &pb.ShortenURL{
+		Id:      url.ID,
+		UrlFull: url.URLFull,
+		UrlCode: url.URLCode,
+	}
+
+	mlog.LogResponse(ctx, s.log, fname, resp)
+
+	return resp, nil
+}
+
+func (s *ShortenService) DeleteShortenURL(ctx context.Context,
+	req *pb.DeleteShortenURLRequest) (*pb.DeleteShortenURLReply, error) {
 	return &pb.DeleteShortenURLReply{}, nil
 }
-func (s *ShortenService) GetShortenURL(ctx context.Context, req *pb.GetShortenURLRequest) (*pb.GetShortenURLReply, error) {
-	return &pb.GetShortenURLReply{}, nil
-}
-func (s *ShortenService) ListShortenURL(ctx context.Context, req *pb.ListShortenURLRequest) (*pb.ListShortenURLReply, error) {
+func (s *ShortenService) ListShortenURL(ctx context.Context,
+	req *pb.ListShortenURLRequest) (*pb.ListShortenURLReply, error) {
 	return &pb.ListShortenURLReply{}, nil
 }

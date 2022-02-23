@@ -4,9 +4,10 @@ import (
 	"time"
 	"url-shorten/app/shorten/internal/conf"
 
-	mredis "github.com/HarryBird/mo-kit/cache/redis/goredis"
+	mredis "github.com/HarryBird/mo-kit/cache/goredis"
 	mgorm "github.com/HarryBird/mo-kit/db/gorm"
-	mlog "github.com/HarryBird/mo-kit/log/kratos/gorm"
+	grlog "github.com/HarryBird/mo-kit/kratos/log/goredis"
+	mlog "github.com/HarryBird/mo-kit/kratos/log/gorm"
 	"github.com/go-kratos/kratos/v2/log"
 	redis "github.com/go-redis/redis/v8"
 	"github.com/google/wire"
@@ -52,12 +53,14 @@ func NewDB(conf *conf.Data, logger log.Logger) *gorm.DB {
 
 func NewRedis(conf *conf.Data, logger log.Logger) *redis.Client {
 	rlog := log.NewHelper(log.With(logger, "mod", "repo.redis"))
-	rdb, err := mredis.NewRedis(conf.Redis, logger)
+	rdb, err := mredis.NewRedis(conf.Redis)
 	if err != nil {
 		rlog.Fatalf("repo: failed opening connection to redis %v", err)
 	}
 
 	rlog.Infof("repo: redis connection options: %+v", rdb.Options())
+
+	redis.SetLogger(grlog.New(logger))
 
 	return rdb
 }

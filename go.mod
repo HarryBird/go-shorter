@@ -2,16 +2,18 @@ module url-shorten
 
 go 1.17
 
+replace github.com/HarryBird/mo-kit => /Users/harry/Code/practice/mo-kit
+
 require (
 	github.com/HarryBird/mo-kit v0.0.0-20220221083232-c88e0719162b
 	github.com/envoyproxy/protoc-gen-validate v0.6.3
 	github.com/go-kratos/kratos/contrib/log/zap/v2 v2.0.0-20220215033000-471a2aab794b
 	github.com/go-kratos/kratos/v2 v2.1.5
+	github.com/go-redis/redis/v8 v8.11.4
 	github.com/google/wire v0.5.0
 	github.com/jxskiss/base62 v1.1.0
 	github.com/pkg/errors v0.9.1
 	github.com/spaolacci/murmur3 v1.1.0
-	github.com/spf13/cast v1.4.1
 	google.golang.org/grpc v1.44.0
 	google.golang.org/protobuf v1.27.1
 	gorm.io/driver/mysql v1.2.3
@@ -26,7 +28,6 @@ require (
 	github.com/go-logr/logr v1.2.1 // indirect
 	github.com/go-logr/stdr v1.2.0 // indirect
 	github.com/go-playground/form/v4 v4.2.0 // indirect
-	github.com/go-redis/redis/v8 v8.11.4 // indirect
 	github.com/go-sql-driver/mysql v1.6.0 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/google/uuid v1.3.0 // indirect
@@ -34,6 +35,7 @@ require (
 	github.com/imdario/mergo v0.3.12 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.4 // indirect
+	github.com/spf13/cast v1.4.1 // indirect
 	go.opentelemetry.io/otel v1.3.0 // indirect
 	go.opentelemetry.io/otel/trace v1.3.0 // indirect
 	go.uber.org/atomic v1.7.0 // indirect

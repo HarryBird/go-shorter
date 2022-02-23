@@ -23,6 +23,18 @@ func ErrorCreatrShortenUrlFail(format string, args ...interface{}) *errors.Error
 	return errors.New(500, ErrorReason_CREATR_SHORTEN_URL_FAIL.String(), fmt.Sprintf(format, args...))
 }
 
+func IsGetShortenUrlFail(err error) bool {
+	if err == nil {
+		return false
+	}
+	e := errors.FromError(err)
+	return e.Reason == ErrorReason_GET_SHORTEN_URL_FAIL.String() && e.Code == 500
+}
+
+func ErrorGetShortenUrlFail(format string, args ...interface{}) *errors.Error {
+	return errors.New(500, ErrorReason_GET_SHORTEN_URL_FAIL.String(), fmt.Sprintf(format, args...))
+}
+
 func IsDecodeShortenUrlFail(err error) bool {
 	if err == nil {
 		return false
@@ -33,6 +45,18 @@ func IsDecodeShortenUrlFail(err error) bool {
 
 func ErrorDecodeShortenUrlFail(format string, args ...interface{}) *errors.Error {
 	return errors.New(500, ErrorReason_DECODE_SHORTEN_URL_FAIL.String(), fmt.Sprintf(format, args...))
+}
+
+func IsShortenIdInvalid(err error) bool {
+	if err == nil {
+		return false
+	}
+	e := errors.FromError(err)
+	return e.Reason == ErrorReason_SHORTEN_ID_INVALID.String() && e.Code == 400
+}
+
+func ErrorShortenIdInvalid(format string, args ...interface{}) *errors.Error {
+	return errors.New(400, ErrorReason_SHORTEN_ID_INVALID.String(), fmt.Sprintf(format, args...))
 }
 
 func IsShortenCodeInvalid(err error) bool {

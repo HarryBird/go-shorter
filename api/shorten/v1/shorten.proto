@@ -14,26 +14,42 @@ service Shorten {
 	rpc DecodeShortenURL (DecodeShortenURLRequest) returns (DecodeShortenURLReply);
 }
 
-message DecodeShortenURLRequest {
-    string code = 1 [(validate.rules).string.min_len = 1];
-}
-
-message DecodeShortenURLReply {
-    string url_full = 1;
+message ShortenURL {
+    int64 id = 1;
+    string url_full = 2;
+    string url_code = 3;
 }
 
 message CreateShortenURLRequest {
     string url = 1 [(validate.rules).string.pattern = "^(http|https)://"];
 }
 message CreateShortenURLReply {
-    string short_url = 1;
+    ShortenURL shorten_url = 1;
 }
+
+message GetShortenURLRequest {
+    oneof query {
+        option (validate.required) = true;
+        int64 id = 1 [(validate.rules).int64.gt = 0];
+        string code = 2 [(validate.rules).string.min_len = 5];
+    }
+}
+
+message GetShortenURLReply {
+    ShortenURL shorten_url = 1;
+}
+
+message DecodeShortenURLRequest {
+    string code = 1 [(validate.rules).string.min_len = 5];
+}
+
+message DecodeShortenURLReply {
+    string url_full = 1;
+}
+
 
 message DeleteShortenURLRequest {}
 message DeleteShortenURLReply {}
-
-message GetShortenURLRequest {}
-message GetShortenURLReply {}
 
 message ListShortenURLRequest {}
 message ListShortenURLReply {}

@@ -7,6 +7,7 @@ type OriginURL struct {
 
 // ShortenURL 短链
 type ShortenURL struct {
+	ID       int64
 	URLFull  string
 	URLHost  string
 	URLUri   string

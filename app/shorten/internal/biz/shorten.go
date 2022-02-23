@@ -6,6 +6,7 @@ import (
 	"hash/crc64"
 	stdurl "net/url"
 	"strings"
+	"url-shorten/app/shorten/internal/data/dao/query"
 
 	"github.com/HarryBird/mo-kit/msgr"
 	"github.com/go-kratos/kratos/v2/log"
@@ -15,6 +16,9 @@ import (
 )
 
 type ShortenRepo interface {
+	WithID(id int64) query.Option
+	WithCode(code string) query.Option
+	Get(ctx context.Context, opts ...query.Option) (*ShortenURL, error)
 	Create(ctx context.Context, url *ShortenURL) (*ShortenURL, error)
 	Decode(ctx context.Context, url *ShortenURL) (*ShortenURL, error)
 }
@@ -32,46 +36,52 @@ func (uc *ShortenCase) Decode(ctx context.Context, surl *ShortenURL) (*ShortenUR
 	return uc.repo.Decode(ctx, surl)
 }
 
-func (uc *ShortenCase) Create(ctx context.Context, ourl OriginURL) (*ShortenURL, error) {
-	fname := "Create"
-	uc.log.WithContext(ctx).Infof("%s origin url: %s", msgr.W(fname), ourl.Url)
+// Create 创建短链
+func (uc *ShortenCase) Get(ctx context.Context, url *ShortenURL) (*ShortenURL, error) {
+	fname := "Get"
+	uc.log.WithContext(ctx).Infof("%s param: %+v", msgr.W(fname), url)
 
-	surl, err := uc.shorten(ctx, ourl.Url)
+	return uc.repo.Get(ctx, uc.repo.WithID(url.ID), uc.repo.WithCode(url.URLCode))
+}
+
+// Create 创建短链
+func (uc *ShortenCase) Create(ctx context.Context, url *ShortenURL) (*ShortenURL, error) {
+	fname := "Create"
+	uc.log.WithContext(ctx).Infof("%s full url: %s", msgr.W(fname), url.URLFull)
+
+	url, err := uc.shorten(ctx, url)
 	if err != nil {
 		return nil, errors.WithMessage(err, "biz: gen shorten url fail")
 	}
 
-	uc.log.WithContext(ctx).Infof("%s after shorten: %+v", msgr.W(fname), surl)
+	uc.log.WithContext(ctx).Infof("%s after shorten: %+v", msgr.W(fname), url)
 
-	surl, err = uc.repo.Create(ctx, surl)
+	url, err = uc.repo.Create(ctx, url)
 	if err != nil {
 		return nil, errors.WithMessage(err, "biz: create shorten url fail")
 	}
 
-	return surl, nil
+	return url, nil
 }
 
-func (uc *ShortenCase) shorten(ctx context.Context, url string) (*ShortenURL, error) {
-	u, err := stdurl.Parse(url)
+func (uc *ShortenCase) shorten(ctx context.Context, url *ShortenURL) (*ShortenURL, error) {
+	u, err := stdurl.Parse(url.URLFull)
 
 	if err != nil {
 		return nil, errors.WithMessage(err, "biz: url parse fail")
 	}
 
-	surl := &ShortenURL{
-		URLFull: url,
-		URLHost: u.Hostname(),
-		URLCode: uc.hash(ctx, url),
-	}
+	url.URLHost = u.Hostname()
+	url.URLCode = uc.hash(ctx, url.URLFull)
 
 	uriParts := strings.SplitN(u.RequestURI(), "?", 2)
 
-	surl.URLUri = uriParts[0]
+	url.URLUri = uriParts[0]
 	if len(uriParts) > 1 {
-		surl.URLQuery = uriParts[1]
+		url.URLQuery = uriParts[1]
 	}
 
-	return surl, nil
+	return url, nil
 }
 
 func (uc *ShortenCase) hash(ctx context.Context, url string) string {

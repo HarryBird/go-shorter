@@ -10,6 +10,9 @@ enum ErrorReason {
   option (errors.default_code) = 500;
 
   CREATR_SHORTEN_URL_FAIL = 0 [(errors.code) = 500];
-  DECODE_SHORTEN_URL_FAIL = 1 [(errors.code) = 500];
-  SHORTEN_CODE_INVALID = 2 [(errors.code) = 400];
+  GET_SHORTEN_URL_FAIL = 1 [(errors.code) = 500];
+  DECODE_SHORTEN_URL_FAIL = 10 [(errors.code) = 500];
+
+  SHORTEN_ID_INVALID = 101 [(errors.code) = 400];
+  SHORTEN_CODE_INVALID = 102 [(errors.code) = 400];
 }
