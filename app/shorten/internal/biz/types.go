@@ -1,10 +1,5 @@
 package biz
 
-// OriginURL .
-type OriginURL struct {
-	Url string
-}
-
 // ShortenURL 短链
 type ShortenURL struct {
 	ID       int64

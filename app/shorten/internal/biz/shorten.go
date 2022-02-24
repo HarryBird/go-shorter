@@ -18,8 +18,10 @@ import (
 type ShortenRepo interface {
 	WithID(id int64) query.Option
 	WithCode(code string) query.Option
+	WithDeleted(isDel bool) query.Option
 	Get(ctx context.Context, opts ...query.Option) (*ShortenURL, error)
 	Create(ctx context.Context, url *ShortenURL) (*ShortenURL, error)
+	Delete(ctx context.Context, opts ...query.Option) error
 	Decode(ctx context.Context, url *ShortenURL) (*ShortenURL, error)
 }
 
@@ -36,7 +38,15 @@ func (uc *ShortenCase) Decode(ctx context.Context, surl *ShortenURL) (*ShortenUR
 	return uc.repo.Decode(ctx, surl)
 }
 
-// Create 创建短链
+// Delete 获取短链
+func (uc *ShortenCase) Delete(ctx context.Context, url *ShortenURL) error {
+	fname := "Delete"
+	uc.log.WithContext(ctx).Infof("%s param: %+v", msgr.W(fname), url)
+
+	return uc.repo.Delete(ctx, uc.repo.WithID(url.ID), uc.repo.WithCode(url.URLCode), uc.repo.WithDeleted(false))
+}
+
+// Create 获取短链
 func (uc *ShortenCase) Get(ctx context.Context, url *ShortenURL) (*ShortenURL, error) {
 	fname := "Get"
 	uc.log.WithContext(ctx).Infof("%s param: %+v", msgr.W(fname), url)
@@ -66,7 +76,6 @@ func (uc *ShortenCase) Create(ctx context.Context, url *ShortenURL) (*ShortenURL
 
 func (uc *ShortenCase) shorten(ctx context.Context, url *ShortenURL) (*ShortenURL, error) {
 	u, err := stdurl.Parse(url.URLFull)
-
 	if err != nil {
 		return nil, errors.WithMessage(err, "biz: url parse fail")
 	}

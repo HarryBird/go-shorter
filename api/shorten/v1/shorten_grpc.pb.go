@@ -39,7 +39,7 @@ func NewShortenClient(cc grpc.ClientConnInterface) ShortenClient {
 
 func (c *shortenClient) CreateShortenURL(ctx context.Context, in *CreateShortenURLRequest, opts ...grpc.CallOption) (*CreateShortenURLReply, error) {
 	out := new(CreateShortenURLReply)
-	err := c.cc.Invoke(ctx, "/api.shorten.v1.Shorten/CreateShortenURL", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/mowen.api.url_shorten.shorten.v1.Shorten/CreateShortenURL", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -48,7 +48,7 @@ func (c *shortenClient) CreateShortenURL(ctx context.Context, in *CreateShortenU
 
 func (c *shortenClient) DeleteShortenURL(ctx context.Context, in *DeleteShortenURLRequest, opts ...grpc.CallOption) (*DeleteShortenURLReply, error) {
 	out := new(DeleteShortenURLReply)
-	err := c.cc.Invoke(ctx, "/api.shorten.v1.Shorten/DeleteShortenURL", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/mowen.api.url_shorten.shorten.v1.Shorten/DeleteShortenURL", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -57,7 +57,7 @@ func (c *shortenClient) DeleteShortenURL(ctx context.Context, in *DeleteShortenU
 
 func (c *shortenClient) GetShortenURL(ctx context.Context, in *GetShortenURLRequest, opts ...grpc.CallOption) (*GetShortenURLReply, error) {
 	out := new(GetShortenURLReply)
-	err := c.cc.Invoke(ctx, "/api.shorten.v1.Shorten/GetShortenURL", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/mowen.api.url_shorten.shorten.v1.Shorten/GetShortenURL", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -66,7 +66,7 @@ func (c *shortenClient) GetShortenURL(ctx context.Context, in *GetShortenURLRequ
 
 func (c *shortenClient) ListShortenURL(ctx context.Context, in *ListShortenURLRequest, opts ...grpc.CallOption) (*ListShortenURLReply, error) {
 	out := new(ListShortenURLReply)
-	err := c.cc.Invoke(ctx, "/api.shorten.v1.Shorten/ListShortenURL", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/mowen.api.url_shorten.shorten.v1.Shorten/ListShortenURL", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -75,7 +75,7 @@ func (c *shortenClient) ListShortenURL(ctx context.Context, in *ListShortenURLRe
 
 func (c *shortenClient) DecodeShortenURL(ctx context.Context, in *DecodeShortenURLRequest, opts ...grpc.CallOption) (*DecodeShortenURLReply, error) {
 	out := new(DecodeShortenURLReply)
-	err := c.cc.Invoke(ctx, "/api.shorten.v1.Shorten/DecodeShortenURL", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/mowen.api.url_shorten.shorten.v1.Shorten/DecodeShortenURL", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -136,7 +136,7 @@ func _Shorten_CreateShortenURL_Handler(srv interface{}, ctx context.Context, dec
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/api.shorten.v1.Shorten/CreateShortenURL",
+		FullMethod: "/mowen.api.url_shorten.shorten.v1.Shorten/CreateShortenURL",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ShortenServer).CreateShortenURL(ctx, req.(*CreateShortenURLRequest))
@@ -154,7 +154,7 @@ func _Shorten_DeleteShortenURL_Handler(srv interface{}, ctx context.Context, dec
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/api.shorten.v1.Shorten/DeleteShortenURL",
+		FullMethod: "/mowen.api.url_shorten.shorten.v1.Shorten/DeleteShortenURL",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ShortenServer).DeleteShortenURL(ctx, req.(*DeleteShortenURLRequest))
@@ -172,7 +172,7 @@ func _Shorten_GetShortenURL_Handler(srv interface{}, ctx context.Context, dec fu
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/api.shorten.v1.Shorten/GetShortenURL",
+		FullMethod: "/mowen.api.url_shorten.shorten.v1.Shorten/GetShortenURL",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ShortenServer).GetShortenURL(ctx, req.(*GetShortenURLRequest))
@@ -190,7 +190,7 @@ func _Shorten_ListShortenURL_Handler(srv interface{}, ctx context.Context, dec f
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/api.shorten.v1.Shorten/ListShortenURL",
+		FullMethod: "/mowen.api.url_shorten.shorten.v1.Shorten/ListShortenURL",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ShortenServer).ListShortenURL(ctx, req.(*ListShortenURLRequest))
@@ -208,7 +208,7 @@ func _Shorten_DecodeShortenURL_Handler(srv interface{}, ctx context.Context, dec
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/api.shorten.v1.Shorten/DecodeShortenURL",
+		FullMethod: "/mowen.api.url_shorten.shorten.v1.Shorten/DecodeShortenURL",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ShortenServer).DecodeShortenURL(ctx, req.(*DecodeShortenURLRequest))
@@ -220,7 +220,7 @@ func _Shorten_DecodeShortenURL_Handler(srv interface{}, ctx context.Context, dec
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var Shorten_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "api.shorten.v1.Shorten",
+	ServiceName: "mowen.api.url_shorten.shorten.v1.Shorten",
 	HandlerType: (*ShortenServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

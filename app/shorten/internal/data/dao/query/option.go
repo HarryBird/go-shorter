@@ -1,5 +1,10 @@
 package query
 
+const (
+	DefaultPagingLimit = 20
+	MaxPagingLimit     = 100
+)
+
 type Option func(o *Condition)
 
 type Condition struct {
@@ -8,8 +13,9 @@ type Condition struct {
 }
 
 type Where struct {
-	Id   int64
-	Code string
+	Id        int64
+	Code      string
+	IsDeleted bool
 }
 
 type Paging struct {
@@ -19,8 +25,11 @@ type Paging struct {
 
 func NewCondition() *Condition {
 	return &Condition{
+		Where: Where{
+			IsDeleted: false,
+		},
 		Paging: Paging{
-			Limit: 50,
+			Limit: DefaultPagingLimit,
 		},
 	}
 }

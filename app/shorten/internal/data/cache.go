@@ -9,9 +9,7 @@ const (
 	cacheZone = "url-shorten"
 )
 
-var (
-	RedisKeyShortenCodeToURL = cacheEntry{key: "code:%s:url", ttl: 5 * time.Minute}
-)
+var RedisKeyShortenCodeToURL = cacheEntry{key: "code:%s:url", ttl: 5 * time.Minute}
 
 type cacheEntry struct {
 	key string

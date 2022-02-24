@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package api.shorten.v1;
+package mowen.api.url_shorten.shorten.v1;
 
 option go_package = "url-shorten/api/shorten/v1;v1";
 
@@ -43,13 +43,20 @@ message DecodeShortenURLRequest {
     string code = 1 [(validate.rules).string.min_len = 5];
 }
 
+message DeleteShortenURLRequest {
+    oneof query {
+        option (validate.required) = true;
+        int64 id = 1 [(validate.rules).int64.gt = 0];
+        string code = 2 [(validate.rules).string.min_len = 5];
+    }
+}
+message DeleteShortenURLReply {
+    string result = 1;
+}
+
 message DecodeShortenURLReply {
     string url_full = 1;
 }
-
-
-message DeleteShortenURLRequest {}
-message DeleteShortenURLReply {}
 
 message ListShortenURLRequest {}
 message ListShortenURLReply {}

@@ -34,7 +34,6 @@ func NewDB(conf *conf.Data, logger log.Logger) *gorm.DB {
 			LogLevel:      mlog.Info,
 		}),
 	})
-
 	if err != nil {
 		dblog.Fatalf("repo: failed opening connection to mysql: %v", err)
 	}
@@ -75,6 +74,5 @@ func NewData(db *gorm.DB, rdb *redis.Client, logger log.Logger) (*Data, func(), 
 		log: log,
 	}
 	return d, func() {
-
 	}, nil
 }

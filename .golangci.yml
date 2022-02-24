@@ -1,3 +1,14 @@
+run:
+  timeout: 5m
+  modules-download-mode: readonly
+  skip-dirs:
+    - api
+  skip-dirs-use-default: true
+  skip-files:
+    - ".*\\_test\\.go$"
+    - "wire\\_gen\\.go$"
+    - "wire\\.go$"
+
 issues:
   exclude-rules:
     - linters:
@@ -11,6 +22,53 @@ issues:
   max-per-linter: 0
   max-same-issues: 0
 
+linters:
+  disable-all: true
+  fast: false
+  enable:
+    - bodyclose
+    - deadcode
+    - dogsled
+    - durationcheck
+    - errcheck
+    - exportloopref
+    - govet
+    - gosimple
+    - gofmt
+    - gofumpt
+    - goconst
+    - goimports
+    - gomnd
+    - gocyclo
+    - ineffassign
+    - lll
+    - prealloc
+    - revive
+    - staticcheck
+    - structcheck
+    - typecheck
+    - unused
+    - unconvert
+    - varcheck
+    - whitespace
+    - wastedassign
+
+  # don't enable:
+  # - asciicheck
+  # - scopelint
+  # - gochecknoglobals
+  # - gocognit
+  # - godot
+  # - godox
+  # - goerr113
+  # - interfacer
+  # - maligned
+  # - nestif
+  # - prealloc
+  # - testpackage
+  # - stylrcheck
+  # - wsl
+
 linters-settings:
   revive:
     rules:
@@ -22,13 +80,12 @@ linters-settings:
     checks: ["all", "-ST1000", "-ST1003", "-ST1016", "-ST1020", "-ST1021", "-ST1022"]
     initialisms: ["ACL", "API", "ASCII", "CPU", "CSS", "DNS", "EOF", "GUID", "HTML", "HTTP", "HTTPS", "ID", "IP", "JSON", "QPS", "RAM", "RPC", "SLA", "SMTP", "SQL", "SSH", "TCP", "TLS", "TTL", "UDP", "UI", "GID", "UID", "UUID", "URI", "URL", "UTF8", "VM", "XML", "XMPP", "XSRF", "XSS"]
     http-status-code-whitelist: ["200", "400", "404", "500"]
-  lll:
-    line-length: 120
   errcheck:
     check-type-assertions: true
   goconst:
     min-len: 2
     min-occurrences: 3
+    ignore-tests: true
   gocritic:
     enabled-tags:
       - diagnostic
@@ -42,58 +99,21 @@ linters-settings:
     require-explanation: true
     require-specific: true
   funlen:
-    lines: 80
+    lines: 120
   exhaustive:
     check-generated: false
     default-signifies-exhaustive: true
+  whitespace:
+    multi-func: true
+  lll:
+    line-length: 160
+  gomnd:
+    # don't include the "operation", "argument" and "assign"
+    checks: 
+      - case
+      - condition
+      - return
+  gocyclo:
+    # recommend 10-20
+    min-complexity: 20
 
-linters:
-  disable-all: true
-  enable:
-    - bodyclose
-    - deadcode
-    - depguard
-    - dogsled
-    - dupl
-    - errcheck
-    - exportloopref
-    - exhaustive
-    - goconst
-    - gocritic
-    - gofmt
-    - goimports
-    - gomnd
-    - gocyclo
-    - gosec
-    - gosimple
-    - govet
-    - ineffassign
-    - misspell
-    - nolintlint
-    - nakedret
-    - prealloc
-    - predeclared
-    - revive
-    - staticcheck
-    - structcheck
-    - stylecheck
-    - thelper
-    - tparallel
-    - typecheck
-    - unconvert
-    - unparam
-    - varcheck
-    - whitespace
-    - lll 
-    - funlen
-
-run:
-  skip-dirs:
-    - api
-  skip-dirs-use-default: true
-  skip-files:
-    - ".*\\_test\\.go$"
-    - "wire\\_gen\\.go$"
-    - "wire\\.go$"
-  deadline: 5m
-  issues-exit-code: 1

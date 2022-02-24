@@ -35,6 +35,18 @@ func ErrorGetShortenUrlFail(format string, args ...interface{}) *errors.Error {
 	return errors.New(500, ErrorReason_GET_SHORTEN_URL_FAIL.String(), fmt.Sprintf(format, args...))
 }
 
+func IsDeleteShortenUrlFail(err error) bool {
+	if err == nil {
+		return false
+	}
+	e := errors.FromError(err)
+	return e.Reason == ErrorReason_DELETE_SHORTEN_URL_FAIL.String() && e.Code == 500
+}
+
+func ErrorDeleteShortenUrlFail(format string, args ...interface{}) *errors.Error {
+	return errors.New(500, ErrorReason_DELETE_SHORTEN_URL_FAIL.String(), fmt.Sprintf(format, args...))
+}
+
 func IsDecodeShortenUrlFail(err error) bool {
 	if err == nil {
 		return false
@@ -45,6 +57,18 @@ func IsDecodeShortenUrlFail(err error) bool {
 
 func ErrorDecodeShortenUrlFail(format string, args ...interface{}) *errors.Error {
 	return errors.New(500, ErrorReason_DECODE_SHORTEN_URL_FAIL.String(), fmt.Sprintf(format, args...))
+}
+
+func IsShortenUrlNonexist(err error) bool {
+	if err == nil {
+		return false
+	}
+	e := errors.FromError(err)
+	return e.Reason == ErrorReason_SHORTEN_URL_NONEXIST.String() && e.Code == 400
+}
+
+func ErrorShortenUrlNonexist(format string, args ...interface{}) *errors.Error {
+	return errors.New(400, ErrorReason_SHORTEN_URL_NONEXIST.String(), fmt.Sprintf(format, args...))
 }
 
 func IsShortenIdInvalid(err error) bool {

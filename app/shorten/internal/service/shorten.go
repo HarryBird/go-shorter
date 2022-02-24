@@ -3,11 +3,11 @@ package service
 import (
 	"context"
 	"errors"
+	"url-shorten/app/shorten/internal/biz"
 
 	"github.com/go-kratos/kratos/v2/log"
 
 	pb "url-shorten/api/shorten/v1"
-	"url-shorten/app/shorten/internal/biz"
 
 	mlog "github.com/HarryBird/mo-kit/kratos/log/app"
 )
@@ -22,18 +22,15 @@ type ShortenService struct {
 func NewShortenService(uc *biz.ShortenCase, logger log.Logger) *ShortenService {
 	return &ShortenService{
 		uc:  uc,
-		log: log.NewHelper(log.With(logger, "mod", "service.shorten"))}
+		log: log.NewHelper(log.With(logger, "mod", "service.shorten")),
+	}
 }
 
-func (s *ShortenService) DecodeShortenURL(ctx context.Context,
-	req *pb.DecodeShortenURLRequest) (*pb.DecodeShortenURLReply, error) {
-	var (
-		fname = "DecodeShortenURL"
-	)
+func (s *ShortenService) DecodeShortenURL(ctx context.Context, req *pb.DecodeShortenURLRequest) (*pb.DecodeShortenURLReply, error) {
+	fname := "DecodeShortenURL"
 
 	mlog.LogRequest(ctx, s.log, fname, req)
 	surl, err := s.uc.Decode(ctx, &biz.ShortenURL{URLCode: req.Code})
-
 	if err != nil {
 		if errors.Is(err, biz.ErrNotFoundFromDB) {
 			return nil, pb.ErrorShortenCodeInvalid("%s", "invalid shorten code")
@@ -51,8 +48,8 @@ func (s *ShortenService) DecodeShortenURL(ctx context.Context,
 	return resp, nil
 }
 
-func (s *ShortenService) CreateShortenURL(ctx context.Context,
-	req *pb.CreateShortenURLRequest) (*pb.CreateShortenURLReply, error) {
+// CreateShortenURL 创建短链
+func (s *ShortenService) CreateShortenURL(ctx context.Context, req *pb.CreateShortenURLRequest) (*pb.CreateShortenURLReply, error) {
 	var (
 		fname = "CreateShortenURL"
 		resp  = new(pb.CreateShortenURLReply)
@@ -77,8 +74,8 @@ func (s *ShortenService) CreateShortenURL(ctx context.Context,
 	return resp, nil
 }
 
-func (s *ShortenService) GetShortenURL(ctx context.Context, req *pb.GetShortenURLRequest) (*pb.GetShortenURLReply,
-	error) {
+// GetShortenURL 通过id或code，获取短链信息
+func (s *ShortenService) GetShortenURL(ctx context.Context, req *pb.GetShortenURLRequest) (*pb.GetShortenURLReply, error) {
 	var (
 		fname = "GetShortenURL"
 		resp  = new(pb.GetShortenURLReply)
@@ -90,16 +87,9 @@ func (s *ShortenService) GetShortenURL(ctx context.Context, req *pb.GetShortenUR
 		ID:      req.GetId(),
 		URLCode: req.GetCode(),
 	})
-
 	if err != nil {
 		if errors.Is(err, biz.ErrNotFoundFromDB) {
-			if req.GetId() > 0 {
-				return nil, pb.ErrorShortenIdInvalid("%s", "invalid shorten id")
-			}
-
-			if req.GetCode() != "" {
-				return nil, pb.ErrorShortenCodeInvalid("%s", "invalid shorten code")
-			}
+			return nil, pb.ErrorShortenUrlNonexist("%s", "shorten url non exist")
 		}
 
 		mlog.LogErrorStack(ctx, s.log, fname, err)
@@ -117,11 +107,35 @@ func (s *ShortenService) GetShortenURL(ctx context.Context, req *pb.GetShortenUR
 	return resp, nil
 }
 
-func (s *ShortenService) DeleteShortenURL(ctx context.Context,
-	req *pb.DeleteShortenURLRequest) (*pb.DeleteShortenURLReply, error) {
-	return &pb.DeleteShortenURLReply{}, nil
+// DeleteShortenURL 删除短链
+func (s *ShortenService) DeleteShortenURL(ctx context.Context, req *pb.DeleteShortenURLRequest) (*pb.DeleteShortenURLReply, error) {
+	var (
+		fname = "DeleteShortenURL"
+		resp  = new(pb.DeleteShortenURLReply)
+	)
+
+	mlog.LogRequest(ctx, s.log, fname, req)
+
+	err := s.uc.Delete(ctx, &biz.ShortenURL{
+		ID:      req.GetId(),
+		URLCode: req.GetCode(),
+	})
+	if err != nil {
+		if errors.Is(err, biz.ErrNotFoundFromDB) {
+			return nil, pb.ErrorShortenUrlNonexist("%s", "shorten url non exist")
+		}
+
+		mlog.LogErrorStack(ctx, s.log, fname, err)
+		return nil, pb.ErrorDeleteShortenUrlFail("%s", "delete shorten url fail")
+	}
+
+	resp.Result = "ok"
+
+	mlog.LogResponse(ctx, s.log, fname, resp)
+
+	return resp, nil
 }
-func (s *ShortenService) ListShortenURL(ctx context.Context,
-	req *pb.ListShortenURLRequest) (*pb.ListShortenURLReply, error) {
+
+func (s *ShortenService) ListShortenURL(ctx context.Context, req *pb.ListShortenURLRequest) (*pb.ListShortenURLReply, error) {
 	return &pb.ListShortenURLReply{}, nil
 }

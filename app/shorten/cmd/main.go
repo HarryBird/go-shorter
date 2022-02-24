@@ -3,7 +3,6 @@ package main
 import (
 	"flag"
 	"os"
-
 	"url-shorten/app/shorten/internal/conf"
 
 	mzap "github.com/HarryBird/mo-kit/log/zap"
@@ -67,16 +66,16 @@ func main() {
 		panic(err)
 	}
 
-	slog := log.NewHelper(log.With(logger, "mod", "bootstrap"))
-	vv, _ := c.Value("data.redis.pool_timeout").Duration()
-	slog.Infof("config: %+v", vv)
+	// slog := log.NewHelper(log.With(logger, "mod", "bootstrap"))
+	// vv, _ := c.Value("data.redis.pool_timeout").Duration()
+	// slog.Infof("config: %+v", vv)
 
 	var bc conf.Bootstrap
 	if err := c.Scan(&bc); err != nil {
 		panic(err)
 	}
 
-	slog.Infof("bootstrap config: %+v", bc)
+	// slog.Infof("bootstrap config: %+v", bc)
 
 	app, cleanup, err := initApp(bc.Server, bc.Data, logger)
 	if err != nil {

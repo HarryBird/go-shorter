@@ -2,6 +2,7 @@ package data
 
 import (
 	"context"
+	"time"
 	"url-shorten/app/shorten/internal/biz"
 	"url-shorten/app/shorten/internal/data/dao/model"
 	"url-shorten/app/shorten/internal/data/dao/query"
@@ -28,11 +29,23 @@ func NewShortenRepo(data *Data, logger log.Logger) biz.ShortenRepo {
 	}
 }
 
+func (r *shortenRepo) Delete(ctx context.Context, opts ...query.Option) error {
+	err := r.delete(ctx, opts...)
+	if err != nil {
+		if err == biz.ErrNotFoundFromDB {
+			return err
+		}
+
+		return errors.WithMessage(err, "repo: delete url shorten fail")
+	}
+
+	return nil
+}
+
 func (r *shortenRepo) Get(ctx context.Context, opts ...query.Option) (*biz.ShortenURL, error) {
 	// fname := "Get"
 
-	url, err := r.queryRow(ctx, opts...)
-
+	url, err := r.queryOne(ctx, opts...)
 	if err != nil {
 		if err == biz.ErrNotFoundFromDB {
 			return nil, err
@@ -44,10 +57,32 @@ func (r *shortenRepo) Get(ctx context.Context, opts ...query.Option) (*biz.Short
 	return r.modelToBiz(ctx, url), nil
 }
 
-func (r *shortenRepo) queryRow(ctx context.Context, opts ...query.Option) (*model.URLShortened, error) {
-	fname := "queryRow"
-	cond, err := r.applyQueryOption(ctx, opts...)
+func (r *shortenRepo) delete(ctx context.Context, opts ...query.Option) error {
+	fname := "delete"
 
+	cond, err := r.applyQueryOption(ctx, opts...)
+	if err != nil {
+		return errors.WithMessage(err, "repo: delete fail by applyQueryOption")
+	}
+
+	fields := query.Use(r.data.db).URLShortened
+	result, err := query.UseCondition(ctx, r.data.db, cond).Update(fields.DeletedAt, time.Now().Unix())
+
+	if result.RowsAffected == 0 {
+		r.log.WithContext(ctx).Warnf("%s delete shorten url fail: not found", msgr.W(fname))
+		return biz.ErrNotFoundFromDB
+	}
+
+	if err != nil {
+		return errors.WithMessage(err, "repo: delete fail by db")
+	}
+
+	return nil
+}
+
+func (r *shortenRepo) queryOne(ctx context.Context, opts ...query.Option) (*model.URLShortened, error) {
+	fname := "queryOne"
+	cond, err := r.applyQueryOption(ctx, opts...)
 	if err != nil {
 		return nil, errors.WithMessage(err, "repo: query row fail by applyQueryOption")
 	}
@@ -106,7 +141,6 @@ func (r *shortenRepo) Decode(ctx context.Context, url *biz.ShortenURL) (*biz.Sho
 
 	r.log.WithContext(ctx).Infof("%s try query from db: code=%s", msgr.W(fname), url.URLCode)
 	shortenURL, err := dao.WithContext(ctx).Where(dao.URLCode.Eq(url.URLCode)).First()
-
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			r.log.WithContext(ctx).Warnf("%s query from db: not found", msgr.W(fname))
@@ -172,6 +206,10 @@ func (r *shortenRepo) WithOffset(offset int64) query.Option {
 
 func (r *shortenRepo) WithLimit(limit int64) query.Option {
 	return func(o *query.Condition) { o.Paging.Limit = cast.ToInt(limit) }
+}
+
+func (r *shortenRepo) WithDeleted(isDel bool) query.Option {
+	return func(o *query.Condition) { o.Where.IsDeleted = isDel }
 }
 
 func (r *shortenRepo) create(ctx context.Context, url *biz.ShortenURL) (*model.URLShortened, error) {

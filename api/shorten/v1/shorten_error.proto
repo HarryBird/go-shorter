@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package api.shorten.v1;
+package mowen.api.url_shorten.shorten.v1;
 
 option go_package = "url-shorten/api/shorten/v1;v1";
 
@@ -11,8 +11,10 @@ enum ErrorReason {
 
   CREATR_SHORTEN_URL_FAIL = 0 [(errors.code) = 500];
   GET_SHORTEN_URL_FAIL = 1 [(errors.code) = 500];
+  DELETE_SHORTEN_URL_FAIL = 2 [(errors.code) = 500];
   DECODE_SHORTEN_URL_FAIL = 10 [(errors.code) = 500];
 
+  SHORTEN_URL_NONEXIST = 100 [(errors.code) = 400];
   SHORTEN_ID_INVALID = 101 [(errors.code) = 400];
   SHORTEN_CODE_INVALID = 102 [(errors.code) = 400];
 }
