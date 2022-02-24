@@ -6,7 +6,8 @@ import (
 	"hash/crc64"
 	stdurl "net/url"
 	"strings"
-	"url-shorten/app/shorten/internal/data/dao/query"
+
+	"github.com/HarryBird/url-shorten/app/shorten/internal/data/dao/query"
 
 	"github.com/HarryBird/mo-kit/msgr"
 	"github.com/go-kratos/kratos/v2/log"

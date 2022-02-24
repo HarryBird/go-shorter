@@ -1,9 +1,10 @@
 package server
 
 import (
-	v1 "url-shorten/api/shorten/v1"
-	"url-shorten/app/shorten/internal/conf"
-	"url-shorten/app/shorten/internal/service"
+	v1 "github.com/HarryBird/url-shorten/api/shorten/v1"
+
+	"github.com/HarryBird/url-shorten/app/shorten/internal/conf"
+	"github.com/HarryBird/url-shorten/app/shorten/internal/service"
 
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/middleware/logging"

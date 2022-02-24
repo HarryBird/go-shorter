@@ -3,7 +3,8 @@ package main
 import (
 	"flag"
 	"os"
-	"url-shorten/app/shorten/internal/conf"
+
+	"github.com/HarryBird/url-shorten/app/shorten/internal/conf"
 
 	mzap "github.com/HarryBird/mo-kit/log/zap"
 	zlog "github.com/go-kratos/kratos/contrib/log/zap/v2"

@@ -1,6 +1,8 @@
-module url-shorten
+module github.com/HarryBird/url-shorten
 
 go 1.17
+
+// replace github.com/HarryBird/url-shorten => /Users/harry/Code/practice/url-shorten
 
 replace github.com/HarryBird/mo-kit => /Users/harry/Code/practice/mo-kit
 
@@ -14,6 +16,8 @@ require (
 	github.com/jxskiss/base62 v1.1.0
 	github.com/pkg/errors v0.9.1
 	github.com/spaolacci/murmur3 v1.1.0
+	github.com/spf13/cast v1.4.1
+	google.golang.org/genproto v0.0.0-20211223182754-3ac035c7e7cb
 	google.golang.org/grpc v1.44.0
 	google.golang.org/protobuf v1.27.1
 	gorm.io/driver/mysql v1.2.3
@@ -35,7 +39,6 @@ require (
 	github.com/imdario/mergo v0.3.12 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.4 // indirect
-	github.com/spf13/cast v1.4.1 // indirect
 	go.opentelemetry.io/otel v1.3.0 // indirect
 	go.opentelemetry.io/otel/trace v1.3.0 // indirect
 	go.uber.org/atomic v1.7.0 // indirect
@@ -48,7 +51,6 @@ require (
 	golang.org/x/text v0.3.7 // indirect
 	golang.org/x/tools v0.1.9 // indirect
 	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
-	google.golang.org/genproto v0.0.0-20211223182754-3ac035c7e7cb // indirect
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
 	gorm.io/datatypes v1.0.5 // indirect
 	gorm.io/hints v1.1.0 // indirect

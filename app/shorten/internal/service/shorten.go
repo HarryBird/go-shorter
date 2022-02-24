@@ -3,11 +3,12 @@ package service
 import (
 	"context"
 	"errors"
-	"url-shorten/app/shorten/internal/biz"
+
+	"github.com/HarryBird/url-shorten/app/shorten/internal/biz"
 
 	"github.com/go-kratos/kratos/v2/log"
 
-	pb "url-shorten/api/shorten/v1"
+	pb "github.com/HarryBird/url-shorten/api/shorten/v1"
 
 	mlog "github.com/HarryBird/mo-kit/kratos/log/app"
 )

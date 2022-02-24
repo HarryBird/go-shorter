@@ -11,7 +11,7 @@ import (
 	"gorm.io/gorm/clause"
 	"gorm.io/gorm/schema"
 
-	"url-shorten/app/shorten/internal/data/dao/model"
+	"github.com/HarryBird/url-shorten/app/shorten/internal/data/dao/model"
 
 	"gorm.io/gen"
 	"gorm.io/gen/field"

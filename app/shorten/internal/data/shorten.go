@@ -3,9 +3,10 @@ package data
 import (
 	"context"
 	"time"
-	"url-shorten/app/shorten/internal/biz"
-	"url-shorten/app/shorten/internal/data/dao/model"
-	"url-shorten/app/shorten/internal/data/dao/query"
+
+	"github.com/HarryBird/url-shorten/app/shorten/internal/biz"
+	"github.com/HarryBird/url-shorten/app/shorten/internal/data/dao/model"
+	"github.com/HarryBird/url-shorten/app/shorten/internal/data/dao/query"
 
 	"github.com/HarryBird/mo-kit/msgr"
 	"github.com/go-kratos/kratos/v2/log"

@@ -7,12 +7,11 @@
 package main
 
 import (
-	"url-shorten/app/shorten/internal/biz"
-	"url-shorten/app/shorten/internal/conf"
-	"url-shorten/app/shorten/internal/data"
-	"url-shorten/app/shorten/internal/server"
-	"url-shorten/app/shorten/internal/service"
-
+	"github.com/HarryBird/url-shorten/app/shorten/internal/biz"
+	"github.com/HarryBird/url-shorten/app/shorten/internal/conf"
+	"github.com/HarryBird/url-shorten/app/shorten/internal/data"
+	"github.com/HarryBird/url-shorten/app/shorten/internal/server"
+	"github.com/HarryBird/url-shorten/app/shorten/internal/service"
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"
 )

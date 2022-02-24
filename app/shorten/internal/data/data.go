@@ -2,7 +2,8 @@ package data
 
 import (
 	"time"
-	"url-shorten/app/shorten/internal/conf"
+
+	"github.com/HarryBird/url-shorten/app/shorten/internal/conf"
 
 	mredis "github.com/HarryBird/mo-kit/cache/goredis"
 	mgorm "github.com/HarryBird/mo-kit/db/gorm"
