@@ -1,0 +1,56 @@
+syntax = "proto3";
+package mowen.api;
+
+option go_package = "url-shorten/app/gateway/internal/conf;conf";
+
+import "google/protobuf/duration.proto";
+
+message Bootstrap {
+  Server server = 1;
+  Data data = 2;
+}
+
+message Server {
+  message HTTP {
+    string network = 1;
+    string addr = 2;
+    google.protobuf.Duration timeout = 3;
+  }
+  message GRPC {
+    string network = 1;
+    string addr = 2;
+    google.protobuf.Duration timeout = 3;
+  }
+  HTTP http = 1;
+  GRPC grpc = 2;
+}
+
+message Data {
+  message Database {
+    message Pool {
+        int32 max_idle = 1;
+        int32 max_open = 2;
+        int32 max_life_time = 3;
+    }
+    string driver = 1;
+    string source = 2;
+    Pool pool = 3;
+  }
+  message Redis {
+    string network = 1;
+    string addr = 2;
+    string password = 3;
+    int32 db = 4;
+    int32 read_timeout = 5;
+    int32 write_timeout = 6;
+    int32 dial_timeout = 7;
+    int32 idle_timeout = 8;
+    int32 pool_timeout = 9;
+    int32 max_conn_age = 10;
+    string pool_type = 11;
+    int32 pool_size = 12;
+    int32 min_idle_conns = 13;
+  }
+  Database database = 1;
+  Redis redis = 2;
+}

@@ -1,0 +1,27 @@
+server:
+  http:
+    addr: 0.0.0.0:8000
+    timeout: 1s
+  grpc:
+    addr: 0.0.0.0:9000
+    timeout: 1s
+data:
+  redis:
+    addr: 127.0.0.1:6379
+    db: 0
+    password:
+    # 1000ms
+    dial_timeout: 1000
+    # 200ms
+    read_timeout: 200
+    # 200ms
+    write_timeout: 200
+    # 5 min = 300 * 1000 ms
+    idle_timeout: 300000
+    # 1000ms (read_timeout+1)
+    pool_timeout: 1200
+    # no expire
+    max_conn_age: 0
+    pool_type: fifo
+    pool_size: 50
+    min_idle_conns: 5

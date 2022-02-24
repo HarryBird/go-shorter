@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package mowen.api.url_shorten.gateway.v1;
+
+option go_package = "url-shorten/api/gateway/v1;v1";
+
+import "google/api/annotations.proto";
+import "validate/validate.proto";
+
+service Gateway {
+	rpc ShortenURL (ShortenURLRequest) returns (ShortenURLReply) {
+        option (google.api.http) = {
+            post: "/v1/url/shorten"
+            body: "*"
+        };
+    }
+
+	rpc DecodeURL (DecodeURLRequest) returns (DecodeURLReply) {
+        option (google.api.http) = {
+            get: "/v1/url/decode"
+        };
+    }
+}
+
+message ShortenURLRequest {
+    string url = 1 [(validate.rules).string.pattern = "^(http|https)://"];
+}
+message ShortenURLReply {
+    string url = 1;
+}
+
+message DecodeURLRequest {}
+message DecodeURLReply {}

@@ -1,0 +1,55 @@
+# Generated with protoc-gen-openapi
+# https://github.com/google/gnostic/tree/master/apps/protoc-gen-openapi
+
+openapi: 3.0.3
+info:
+    title: Gateway API
+    version: 0.0.1
+paths:
+    /v1/url/decode:
+        get:
+            tags:
+                - Gateway
+            operationId: Gateway_DecodeURL
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/DecodeURLReply'
+    /v1/url/shorten:
+        post:
+            tags:
+                - Gateway
+            operationId: Gateway_ShortenURL
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/ShortenURLRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ShortenURLReply'
+components:
+    schemas:
+        DecodeURLReply:
+            type: object
+            properties: {}
+        ShortenURLReply:
+            type: object
+            properties:
+                url:
+                    type: string
+        ShortenURLRequest:
+            type: object
+            properties:
+                url:
+                    type: string
+tags:
+    - name: Gateway
