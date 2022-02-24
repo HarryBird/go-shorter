@@ -9,6 +9,7 @@ init:
 	go install github.com/google/gnostic/cmd/protoc-gen-openapi@v0.6.1
 	go install gorm.io/gen/tools/gentool@latest
 	go install github.com/envoyproxy/protoc-gen-validate@latest
+	go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2@latest
 	curl -sSfL https://raw.githubusercontent.com/cosmtrek/air/master/install.sh | sh -s -- -b $(go env GOPATH)/bin
 
 # show help
@@ -29,3 +30,4 @@ help:
 	{ lastLine = $$0 }' $(MAKEFILE_LIST)
 
 .DEFAULT_GOAL := help
+

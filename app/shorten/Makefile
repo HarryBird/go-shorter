@@ -17,6 +17,9 @@ api:
  	       --go-http_out=paths=source_relative:$(API_PROTO_PATH) \
  	       --go-grpc_out=paths=source_relative:$(API_PROTO_PATH) \
  	       --openapi_out=paths=source_relative:$(API_PROTO_PATH) \
+			--openapiv2_out $(API_PROTO_PATH) \
+			--openapiv2_opt logtostderr=true \
+			--openapiv2_opt json_names_for_fields=false \
 	       $(API_PROTO_FILES)
 
 .PHONY: error
