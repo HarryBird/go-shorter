@@ -8,10 +8,9 @@ import "validate/validate.proto";
 
 service Shorten {
 	rpc CreateShortenURL (CreateShortenURLRequest) returns (CreateShortenURLReply);
-	rpc DeleteShortenURL (DeleteShortenURLRequest) returns (DeleteShortenURLReply);
+	rpc DeleteShorenURL (DeleteShortenURLRequest) returns (DeleteShortenURLReply);
 	rpc GetShortenURL (GetShortenURLRequest) returns (GetShortenURLReply);
 	rpc ListShortenURL (ListShortenURLRequest) returns (ListShortenURLReply);
-	rpc DecodeShortenURL (DecodeShortenURLRequest) returns (DecodeShortenURLReply);
 }
 
 message ShortenURL {
@@ -39,10 +38,6 @@ message GetShortenURLReply {
     ShortenURL shorten_url = 1;
 }
 
-message DecodeShortenURLRequest {
-    string code = 1 [(validate.rules).string.min_len = 5];
-}
-
 message DeleteShortenURLRequest {
     oneof query {
         option (validate.required) = true;
@@ -52,10 +47,6 @@ message DeleteShortenURLRequest {
 }
 message DeleteShortenURLReply {
     string result = 1;
-}
-
-message DecodeShortenURLReply {
-    string url_full = 1;
 }
 
 message ListShortenURLRequest {}
