@@ -4,7 +4,8 @@ ROOT_PATH=../..
 APP_NAME=gateway
 APP_BIN_PATH=bin/$(APP_NAME)
 API_PROTO_PATH=$(ROOT_PATH)/api/$(APP_NAME)
-API_PROTO_FILES=$(shell find ../../api/gateway -name *.proto)
+API_PROTO_FILES=$(shell find ../../api/gateway -name *.proto ! -name '*_err.proto')
+ERR_PROTO_FILES=$(shell find ../../api/gateway -name *_err.proto )
 APP_PROTO_FILES=$(shell find ./ -name *.proto)
 
 .PHONY: api
@@ -30,7 +31,7 @@ error:
 	       --proto_path=$(ROOT_PATH)/third_party \
  	       --go_out=paths=source_relative:$(API_PROTO_PATH) \
 		   --go-errors_out=paths=source_relative:$(API_PROTO_PATH) \
-	       $(API_PROTO_FILES)
+	       $(ERR_PROTO_FILES)
 
 .PHONY: validate
 # generate validate proto

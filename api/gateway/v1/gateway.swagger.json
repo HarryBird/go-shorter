@@ -16,28 +16,6 @@
     "application/json"
   ],
   "paths": {
-    "/v1/url/decode": {
-      "get": {
-        "operationId": "Gateway_DecodeURL",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1DecodeURLReply"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "tags": [
-          "Gateway"
-        ]
-      }
-    },
     "/v1/url/shorten": {
       "post": {
         "operationId": "Gateway_ShortenURL",
@@ -100,7 +78,12 @@
       }
     },
     "v1DecodeURLReply": {
-      "type": "object"
+      "type": "object",
+      "properties": {
+        "url": {
+          "type": "string"
+        }
+      }
     },
     "v1ShortenURLReply": {
       "type": "object",
@@ -111,6 +94,14 @@
       }
     },
     "v1ShortenURLRequest": {
+      "type": "object",
+      "properties": {
+        "url": {
+          "type": "string"
+        }
+      }
+    },
+    "v1VisitURLReply": {
       "type": "object",
       "properties": {
         "url": {

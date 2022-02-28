@@ -69,7 +69,7 @@ func main() {
 		panic(err)
 	}
 
-	// slog := log.NewHelper(log.With(logger, "mod", "bootstrap"))
+	slog := log.NewHelper(log.With(logger, "mod", "bootstrap"))
 	// vv, _ := c.Value("data.redis.pool_timeout").Duration()
 	// slog.Infof("config: %+v", vv)
 
@@ -78,9 +78,9 @@ func main() {
 		panic(err)
 	}
 
-	// slog.Infof("bootstrap config: %+v", bc)
+	slog.Infof("bootstrap config: %+v", bc.App)
 
-	app, cleanup, err := initApp(bc.Server, bc.Data, logger)
+	app, cleanup, err := initApp(bc.Server, bc.Data, bc.App, logger)
 	if err != nil {
 		panic(err)
 	}

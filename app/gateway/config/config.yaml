@@ -25,3 +25,6 @@ data:
     pool_type: fifo
     pool_size: 50
     min_idle_conns: 5
+app:
+  shorten:
+    host: "https://mo/s"

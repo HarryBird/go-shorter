@@ -24,6 +24,7 @@ const _ = grpc.SupportPackageIsVersion7
 type GatewayClient interface {
 	ShortenURL(ctx context.Context, in *ShortenURLRequest, opts ...grpc.CallOption) (*ShortenURLReply, error)
 	DecodeURL(ctx context.Context, in *DecodeURLRequest, opts ...grpc.CallOption) (*DecodeURLReply, error)
+	VisitURL(ctx context.Context, in *VisitURLRequest, opts ...grpc.CallOption) (*VisitURLReply, error)
 }
 
 type gatewayClient struct {
@@ -52,12 +53,22 @@ func (c *gatewayClient) DecodeURL(ctx context.Context, in *DecodeURLRequest, opt
 	return out, nil
 }
 
+func (c *gatewayClient) VisitURL(ctx context.Context, in *VisitURLRequest, opts ...grpc.CallOption) (*VisitURLReply, error) {
+	out := new(VisitURLReply)
+	err := c.cc.Invoke(ctx, "/mowen.api.url_shorten.gateway.v1.Gateway/VisitURL", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // GatewayServer is the server API for Gateway service.
 // All implementations must embed UnimplementedGatewayServer
 // for forward compatibility
 type GatewayServer interface {
 	ShortenURL(context.Context, *ShortenURLRequest) (*ShortenURLReply, error)
 	DecodeURL(context.Context, *DecodeURLRequest) (*DecodeURLReply, error)
+	VisitURL(context.Context, *VisitURLRequest) (*VisitURLReply, error)
 	mustEmbedUnimplementedGatewayServer()
 }
 
@@ -70,6 +81,9 @@ func (UnimplementedGatewayServer) ShortenURL(context.Context, *ShortenURLRequest
 }
 func (UnimplementedGatewayServer) DecodeURL(context.Context, *DecodeURLRequest) (*DecodeURLReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DecodeURL not implemented")
+}
+func (UnimplementedGatewayServer) VisitURL(context.Context, *VisitURLRequest) (*VisitURLReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method VisitURL not implemented")
 }
 func (UnimplementedGatewayServer) mustEmbedUnimplementedGatewayServer() {}
 
@@ -120,6 +134,24 @@ func _Gateway_DecodeURL_Handler(srv interface{}, ctx context.Context, dec func(i
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Gateway_VisitURL_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(VisitURLRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(GatewayServer).VisitURL(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/mowen.api.url_shorten.gateway.v1.Gateway/VisitURL",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(GatewayServer).VisitURL(ctx, req.(*VisitURLRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Gateway_ServiceDesc is the grpc.ServiceDesc for Gateway service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -134,6 +166,10 @@ var Gateway_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DecodeURL",
 			Handler:    _Gateway_DecodeURL_Handler,
+		},
+		{
+			MethodName: "VisitURL",
+			Handler:    _Gateway_VisitURL_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

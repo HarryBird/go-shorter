@@ -1,11 +1,20 @@
 package biz
 
-// ShortenURL 短链
-type ShortenURL struct {
-	ID       int64
-	URLFull  string
-	URLHost  string
-	URLUri   string
-	URLQuery string
-	URLCode  string
+// ShortenIn Shorten 入参
+type ShortenIn struct {
+	URL string
+}
+
+// ShortenIn Shorten 出参
+type ShortenOut struct {
+	Code string
+	URL  string
+}
+
+type DecodeIn struct {
+	Code string
+}
+
+type DecodeOut struct {
+	URL string
 }

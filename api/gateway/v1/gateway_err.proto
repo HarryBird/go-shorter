@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package mowen.api.url_shorten.gateway.v1;
+
+option go_package = "url-shorten/api/gateway/v1;v1";
+
+import "errors/errors.proto";
+
+enum ErrorReason {
+  option (errors.default_code) = 500;
+
+  CREATR_SHORTEN_URL_FAIL = 0 [(errors.code) = 500];
+  DECODE_SHORTEN_URL_FAIL = 1 [(errors.code) = 500];
+  DECODE_SHORTEN_URL_NONEXIST = 2 [(errors.code) = 400];
+}

@@ -28,7 +28,8 @@ type Data struct {
 func NewShortenServiceClient() sv1.ShortenClient {
 	conn, err := grpc.DialInsecure(
 		context.Background(),
-		grpc.WithEndpoint("http://127.0.0.1:9100"),
+		// grpc.WithEndpoint("http://127.0.0.1:9100"),
+		grpc.WithEndpoint("127.0.0.1:9100"),
 		grpc.WithMiddleware(
 			recovery.Recovery(),
 		),
