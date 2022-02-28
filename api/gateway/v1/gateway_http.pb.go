@@ -18,12 +18,14 @@ var _ = binding.EncodeURL
 const _ = http.SupportPackageIsVersion1
 
 type GatewayHTTPServer interface {
+	DecodeURL(context.Context, *DecodeURLRequest) (*DecodeURLReply, error)
 	ShortenURL(context.Context, *ShortenURLRequest) (*ShortenURLReply, error)
 }
 
 func RegisterGatewayHTTPServer(s *http.Server, srv GatewayHTTPServer) {
 	r := s.Route("/")
 	r.POST("/v1/url/shorten", _Gateway_ShortenURL0_HTTP_Handler(srv))
+	r.GET("/v1/url/decode/{code}", _Gateway_DecodeURL0_HTTP_Handler(srv))
 }
 
 func _Gateway_ShortenURL0_HTTP_Handler(srv GatewayHTTPServer) func(ctx http.Context) error {
@@ -45,7 +47,30 @@ func _Gateway_ShortenURL0_HTTP_Handler(srv GatewayHTTPServer) func(ctx http.Cont
 	}
 }
 
+func _Gateway_DecodeURL0_HTTP_Handler(srv GatewayHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in DecodeURLRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindVars(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, "/mowen.api.url_shorten.gateway.v1.Gateway/DecodeURL")
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.DecodeURL(ctx, req.(*DecodeURLRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*DecodeURLReply)
+		return ctx.Result(200, reply)
+	}
+}
+
 type GatewayHTTPClient interface {
+	DecodeURL(ctx context.Context, req *DecodeURLRequest, opts ...http.CallOption) (rsp *DecodeURLReply, err error)
 	ShortenURL(ctx context.Context, req *ShortenURLRequest, opts ...http.CallOption) (rsp *ShortenURLReply, err error)
 }
 
@@ -55,6 +80,19 @@ type GatewayHTTPClientImpl struct {
 
 func NewGatewayHTTPClient(client *http.Client) GatewayHTTPClient {
 	return &GatewayHTTPClientImpl{client}
+}
+
+func (c *GatewayHTTPClientImpl) DecodeURL(ctx context.Context, in *DecodeURLRequest, opts ...http.CallOption) (*DecodeURLReply, error) {
+	var out DecodeURLReply
+	pattern := "/v1/url/decode/{code}"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation("/mowen.api.url_shorten.gateway.v1.Gateway/DecodeURL"))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
 }
 
 func (c *GatewayHTTPClientImpl) ShortenURL(ctx context.Context, in *ShortenURLRequest, opts ...http.CallOption) (*ShortenURLReply, error) {

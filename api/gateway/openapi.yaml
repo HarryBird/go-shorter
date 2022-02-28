@@ -6,6 +6,24 @@ info:
     title: Gateway API
     version: 0.0.1
 paths:
+    /v1/url/decode/{code}:
+        get:
+            tags:
+                - Gateway
+            operationId: Gateway_DecodeURL
+            parameters:
+                - name: code
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/DecodeURLReply'
     /v1/url/shorten:
         post:
             tags:
@@ -26,6 +44,11 @@ paths:
                                 $ref: '#/components/schemas/ShortenURLReply'
 components:
     schemas:
+        DecodeURLReply:
+            type: object
+            properties:
+                url:
+                    type: string
         ShortenURLReply:
             type: object
             properties:

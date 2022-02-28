@@ -15,21 +15,11 @@ service Gateway {
         };
     }
 
-	rpc DecodeURL (DecodeURLRequest) returns (DecodeURLReply);
-    //     option (google.api.http) = {
-    //         get: "/v1/url/decode/{code}"
-    //     };
-    // }
-
-	rpc VisitURL (VisitURLRequest) returns (VisitURLReply);
-
-}
-
-message VisitURLRequest {
-    string code = 1;
-}
-message VisitURLReply {
-    string url = 1;
+	rpc DecodeURL (DecodeURLRequest) returns (DecodeURLReply) {
+        option (google.api.http) = {
+            get: "/v1/url/decode/{code}"
+        };
+    }
 }
 
 message ShortenURLRequest {

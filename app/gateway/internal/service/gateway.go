@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"errors"
 
 	"github.com/HarryBird/url-shorten/app/gateway/internal/biz"
 	"github.com/go-kratos/kratos/v2/log"
@@ -44,38 +45,19 @@ func (s *GatewayService) ShortenURL(ctx context.Context, req *pb.ShortenURLReque
 	return resp, nil
 }
 
-func (s *GatewayService) VisitURL(ctx context.Context, req *pb.VisitURLRequest) (*pb.VisitURLReply, error) {
-	var (
-		fname = "VisitURL"
-		resp  = new(pb.VisitURLReply)
-	)
-
-	s.log.WithContext(ctx).Debugf("========: %#v", req)
-	mlog.LogRequest(ctx, s.log, fname, req)
-	//
-	// reply, err := s.sc.Visit(ctx, &biz.VisitIn{Code: req.Code})
-	// if err != nil {
-	//     mlog.LogErrorStack(ctx, s.log, fname, err)
-	//     return nil, pb.ErrorVisitShortenUrlFail("%s", "decode shorten url fail")
-	// }
-	//
-	// resp.Url = reply.URL
-	mlog.LogResponse(ctx, s.log, fname, resp)
-
-	return resp, nil
-}
-
 func (s *GatewayService) DecodeURL(ctx context.Context, req *pb.DecodeURLRequest) (*pb.DecodeURLReply, error) {
 	var (
 		fname = "DecodeURL"
 		resp  = new(pb.DecodeURLReply)
 	)
 
-	s.log.WithContext(ctx).Debugf("========: %#v", req)
 	mlog.LogRequest(ctx, s.log, fname, req)
 
 	reply, err := s.sc.Decode(ctx, &biz.DecodeIn{Code: req.Code})
 	if err != nil {
+		if errors.Is(err, biz.ErrURLCodeNonexist) {
+			return nil, pb.ErrorDecodeShortenUrlNonexist("invalid shorten code")
+		}
 		mlog.LogErrorStack(ctx, s.log, fname, err)
 		return nil, pb.ErrorDecodeShortenUrlFail("%s", "decode shorten url fail")
 	}
