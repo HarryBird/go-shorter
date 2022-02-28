@@ -27,28 +27,6 @@ func NewShortenService(uc *biz.ShortenCase, logger log.Logger) *ShortenService {
 	}
 }
 
-func (s *ShortenService) DecodeShortenURL(ctx context.Context, req *pb.DecodeShortenURLRequest) (*pb.DecodeShortenURLReply, error) {
-	fname := "DecodeShortenURL"
-
-	mlog.LogRequest(ctx, s.log, fname, req)
-	surl, err := s.uc.Decode(ctx, &biz.ShortenURL{URLCode: req.Code})
-	if err != nil {
-		if errors.Is(err, biz.ErrNotFoundFromDB) {
-			return nil, pb.ErrorShortenCodeInvalid("%s", "invalid shorten code")
-		}
-
-		mlog.LogErrorStack(ctx, s.log, fname, err)
-		return nil, pb.ErrorDecodeShortenUrlFail("%s", "decode shorten code fail")
-	}
-
-	resp := &pb.DecodeShortenURLReply{
-		UrlFull: surl.URLFull,
-	}
-	mlog.LogResponse(ctx, s.log, fname, resp)
-
-	return resp, nil
-}
-
 // CreateShortenURL 创建短链
 func (s *ShortenService) CreateShortenURL(ctx context.Context, req *pb.CreateShortenURLRequest) (*pb.CreateShortenURLReply, error) {
 	var (
@@ -58,16 +36,16 @@ func (s *ShortenService) CreateShortenURL(ctx context.Context, req *pb.CreateSho
 
 	mlog.LogRequest(ctx, s.log, fname, req)
 
-	url, err := s.uc.Create(ctx, &biz.ShortenURL{URLFull: req.Url})
+	out, err := s.uc.Create(ctx, &biz.CreateIn{URL: req.Url})
 	if err != nil {
 		mlog.LogErrorStack(ctx, s.log, fname, err)
 		return nil, pb.ErrorCreatrShortenUrlFail("%s", "create shorten url fail")
 	}
 
 	resp.ShortenUrl = &pb.ShortenURL{
-		Id:      url.ID,
-		UrlFull: url.URLFull,
-		UrlCode: url.URLCode,
+		Id:      out.ID,
+		UrlFull: out.URL,
+		UrlCode: out.Code,
 	}
 
 	mlog.LogResponse(ctx, s.log, fname, resp)
@@ -84,9 +62,9 @@ func (s *ShortenService) GetShortenURL(ctx context.Context, req *pb.GetShortenUR
 
 	mlog.LogRequest(ctx, s.log, fname, req)
 
-	url, err := s.uc.Get(ctx, &biz.ShortenURL{
-		ID:      req.GetId(),
-		URLCode: req.GetCode(),
+	out, err := s.uc.Get(ctx, &biz.GetIn{
+		ID:   req.GetId(),
+		Code: req.GetCode(),
 	})
 	if err != nil {
 		if errors.Is(err, biz.ErrNotFoundFromDB) {
@@ -98,9 +76,9 @@ func (s *ShortenService) GetShortenURL(ctx context.Context, req *pb.GetShortenUR
 	}
 
 	resp.ShortenUrl = &pb.ShortenURL{
-		Id:      url.ID,
-		UrlFull: url.URLFull,
-		UrlCode: url.URLCode,
+		Id:      out.ID,
+		UrlFull: out.URL,
+		UrlCode: out.Code,
 	}
 
 	mlog.LogResponse(ctx, s.log, fname, resp)
@@ -117,9 +95,9 @@ func (s *ShortenService) DeleteShortenURL(ctx context.Context, req *pb.DeleteSho
 
 	mlog.LogRequest(ctx, s.log, fname, req)
 
-	err := s.uc.Delete(ctx, &biz.ShortenURL{
-		ID:      req.GetId(),
-		URLCode: req.GetCode(),
+	err := s.uc.Delete(ctx, &biz.DeleteIn{
+		ID:   req.GetId(),
+		Code: req.GetCode(),
 	})
 	if err != nil {
 		if errors.Is(err, biz.ErrNotFoundFromDB) {
