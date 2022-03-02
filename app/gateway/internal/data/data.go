@@ -9,7 +9,9 @@ import (
 	grlog "github.com/HarryBird/mo-kit/kratos/log/goredis"
 	sv1 "github.com/HarryBird/url-shorten/api/shorten/v1"
 	"github.com/go-kratos/kratos/v2/log"
+	"github.com/go-kratos/kratos/v2/middleware/logging"
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
+	"github.com/go-kratos/kratos/v2/middleware/validate"
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 	redis "github.com/go-redis/redis/v8"
 	"github.com/google/wire"
@@ -25,13 +27,15 @@ type Data struct {
 	log *log.Helper
 }
 
-func NewShortenServiceClient() sv1.ShortenClient {
+func NewShortenServiceClient(logger log.Logger) sv1.ShortenClient {
 	conn, err := grpc.DialInsecure(
 		context.Background(),
 		// grpc.WithEndpoint("http://127.0.0.1:9100"),
 		grpc.WithEndpoint("127.0.0.1:9100"),
 		grpc.WithMiddleware(
 			recovery.Recovery(),
+			logging.Client(logger),
+			validate.Validator(),
 		),
 	)
 	if err != nil {

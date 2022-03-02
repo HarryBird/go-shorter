@@ -21,7 +21,7 @@ import (
 // initApp init kratos application.
 func initApp(confServer *conf.Server, confData *conf.Data, app *conf.App, logger log.Logger) (*kratos.App, func(), error) {
 	client := data.NewRedis(confData, logger)
-	shortenClient := data.NewShortenServiceClient()
+	shortenClient := data.NewShortenServiceClient(logger)
 	dataData, cleanup, err := data.NewData(client, shortenClient, logger)
 	if err != nil {
 		return nil, nil, err
