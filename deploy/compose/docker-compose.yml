@@ -1,0 +1,39 @@
+version: "3.9"
+services:
+
+  shorten:
+    build:
+      context: ../../
+      dockerfile: deploy/build/Dockerfile
+      args:
+        APP_NAME: shorten
+        APP_ENV: DevLab
+    container_name: DevLab.urlshorten.shorten
+    hostname: mo.urlshorten.shorten
+    restart: always
+    networks:
+      dev-net:
+        ipv4_address: 172.27.1.10
+
+  gateway:
+    build:
+      context: ../../
+      dockerfile: deploy/build/Dockerfile
+      args:
+        APP_NAME: gateway
+        APP_ENV: DevLab
+    container_name: DevLab.urlshorten.gateway
+    depends_on:
+      - shorten
+    hostname: mo.urlshorten.gateway
+    restart: always
+    ports:
+      - "19000:9000"
+      - "18000:8000"
+    networks:
+      dev-net:
+        ipv4_address: 172.27.1.11
+
+networks:
+  dev-net:
+    external: true 

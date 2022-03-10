@@ -2,7 +2,7 @@ GOPATH:=$(shell go env GOPATH)
 VERSION=$(shell git describe --tags --always)
 ROOT_PATH=../..
 APP_NAME=gateway
-APP_BIN_PATH=bin/$(APP_NAME)
+APP_BIN=bin/server
 API_PROTO_PATH=$(ROOT_PATH)/api/$(APP_NAME)
 API_PROTO_FILES=$(shell find ../../api/gateway -name *.proto ! -name '*_err.proto')
 ERR_PROTO_FILES=$(shell find ../../api/gateway -name *_err.proto )
@@ -68,12 +68,12 @@ dao:
 .PHONY: build
 # build
 build:
-	mkdir -p bin/ && cd cmd && go build -ldflags "-X main.Version=$(VERSION)" -o ../$(APP_BIN_PATH) ./...
+	mkdir -p bin/ && cd cmd && go build -ldflags "-X main.Version=$(VERSION)" -o ../$(APP_BIN) ./...
 
 .PHONY: run
 # run
 run:
-	./$(APP_BIN_PATH) -conf ./config
+	./$(APP_BIN) -conf ./config
 
 .PHONY: air
 # run by air

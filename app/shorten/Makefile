@@ -2,9 +2,10 @@ GOPATH:=$(shell go env GOPATH)
 VERSION=$(shell git describe --tags --always)
 ROOT_PATH=../..
 APP_NAME=shorten
-APP_BIN_PATH=bin/$(APP_NAME)
+APP_BIN=bin/server
 API_PROTO_PATH=$(ROOT_PATH)/api/$(APP_NAME)
-API_PROTO_FILES=$(shell find ../../api/shorten -name *.proto)
+API_PROTO_FILES=$(shell find ../../api/shorten -name *.proto ! -name '*_err.proto')
+ERR_PROTO_FILES=$(shell find ../../api/shorten -name *_err.proto )
 APP_PROTO_FILES=$(shell find ./ -name *.proto)
 
 .PHONY: api
@@ -67,12 +68,12 @@ dao:
 .PHONY: build
 # build
 build:
-	mkdir -p bin/ && cd cmd && go build -ldflags "-X main.Version=$(VERSION)" -o ../$(APP_BIN_PATH) ./...
+	mkdir -p bin/ && cd cmd && go build -ldflags "-X main.Version=$(VERSION)" -o ../$(APP_BIN) ./...
 
 .PHONY: run
 # run
 run:
-	./$(APP_BIN_PATH) -conf ./config
+	./$(APP_BIN) -conf ./config
 
 .PHONY: air
 # run by air

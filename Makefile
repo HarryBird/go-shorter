@@ -12,6 +12,10 @@ init:
 	go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2@latest
 	curl -sSfL https://raw.githubusercontent.com/cosmtrek/air/master/install.sh | sh -s -- -b $(go env GOPATH)/bin
 
+.PHONY: compose
+compose:
+	COMPOSE_PROJECT_NAME=urlshorten docker-compose -f deploy/compose/docker-compose.yml up -d --build
+
 # show help
 help:
 	@echo ''

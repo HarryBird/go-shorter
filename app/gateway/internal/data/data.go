@@ -8,8 +8,10 @@ import (
 	mredis "github.com/HarryBird/mo-kit/cache/goredis"
 	grlog "github.com/HarryBird/mo-kit/kratos/log/goredis"
 	sv1 "github.com/HarryBird/url-shorten/api/shorten/v1"
+	prom "github.com/go-kratos/kratos/contrib/metrics/prometheus/v2"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/middleware/logging"
+	"github.com/go-kratos/kratos/v2/middleware/metrics"
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
 	"github.com/go-kratos/kratos/v2/middleware/validate"
 	"github.com/go-kratos/kratos/v2/transport/grpc"
@@ -31,11 +33,15 @@ func NewShortenServiceClient(logger log.Logger) sv1.ShortenClient {
 	conn, err := grpc.DialInsecure(
 		context.Background(),
 		// grpc.WithEndpoint("http://127.0.0.1:9100"),
-		grpc.WithEndpoint("127.0.0.1:9100"),
+		grpc.WithEndpoint("DevLab.urlshorten.shorten:9000"),
 		grpc.WithMiddleware(
 			recovery.Recovery(),
 			logging.Client(logger),
 			validate.Validator(),
+			metrics.Client(
+				metrics.WithSeconds(prom.NewHistogram(_metricSeconds)),
+				metrics.WithRequests(prom.NewCounter(_metricRequests)),
+			),
 		),
 	)
 	if err != nil {

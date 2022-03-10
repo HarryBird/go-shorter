@@ -1,21 +1,21 @@
 server:
   http:
-    addr: 127.0.0.1:8100
+    addr: 0.0.0.0:8000
     timeout: 1s
   grpc:
-    addr: 127.0.0.1:9100
+    addr: 0.0.0.0:9000
     timeout: 1s
 data:
   database:
     driver: mysql
-    source: root:root@tcp(127.0.0.1:3306)/url_shorter?charset=utf8mb4&parseTime=True&loc=Local&timeout=1s&readTimeout=5s&writeTimeout=5s
+    source: root:root@tcp(DevLab.MySQL:3306)/url_shorter?charset=utf8mb4&parseTime=True&loc=Local&timeout=1s&readTimeout=5s&writeTimeout=5s
     pool:
       max_idle: 10
       max_open: 100
       # 300s
       max_life_time: 300
   redis:
-    addr: 127.0.0.1:6379
+    addr: DevLab.Redis:6379
     db: 0
     password:
     # 1000ms
