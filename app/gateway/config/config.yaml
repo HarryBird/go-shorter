@@ -25,6 +25,12 @@ data:
     pool_type: fifo
     pool_size: 50
     min_idle_conns: 5
+registry:
+  nacos:
+    address: 127.0.0.1
+    port: 18848
+    scheme: http
+    context_path: /nacos
 app:
   shorten:
     host: "https://mo/s"

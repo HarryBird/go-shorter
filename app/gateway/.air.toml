@@ -3,8 +3,8 @@ testdata_dir = "testdata"
 tmp_dir = "tmp"
 
 [build]
-  # bin = "./bin/gateway -conf ./config"
-  bin = "./bin/gateway -conf ./config | jq -C"
+  bin = "./bin/server -conf ./config"
+  # bin = "./bin/server -conf ./config | jq -C"
   cmd = "make build"
   delay = 1000
   exclude_dir = ["assets", "tmp", "vendor", "testdata"]

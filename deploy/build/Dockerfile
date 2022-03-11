@@ -25,7 +25,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         && apt-get autoremove -y && apt-get autoclean -y
 
 COPY --from=builder /src/app/${APP_NAME}/bin /app
-COPY --from=builder /src/app/${APP_NAME}/config/config.yaml.${APP_ENV} /app/config/config.yaml
+COPY --from=builder /src/app/${APP_NAME}/config/${APP_ENV}/config.yaml /app/config/config.yaml
 
 WORKDIR /app
 

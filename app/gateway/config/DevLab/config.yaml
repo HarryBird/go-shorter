@@ -6,14 +6,6 @@ server:
     addr: 0.0.0.0:9000
     timeout: 1s
 data:
-  database:
-    driver: mysql
-    source: root:root@tcp(DevLab.MySQL:3306)/url_shorter?charset=utf8mb4&parseTime=True&loc=Local&timeout=1s&readTimeout=5s&writeTimeout=5s
-    pool:
-      max_idle: 10
-      max_open: 100
-      # 300s
-      max_life_time: 300
   redis:
     addr: DevLab.Redis:6379
     db: 0
@@ -33,4 +25,12 @@ data:
     pool_type: fifo
     pool_size: 50
     min_idle_conns: 5
-
+registry:
+  nacos:
+    address: 172.27.0.18
+    port: 8848
+    scheme: http
+    context_path: /nacos
+app:
+  shorten:
+    host: "https://mo/s"
