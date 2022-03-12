@@ -27,10 +27,12 @@ data:
     min_idle_conns: 5
 registry:
   nacos:
-    address: 172.27.0.18
+    address: DevLab.Nacos
     port: 8848
     scheme: http
     context_path: /nacos
+trace:
+  endpoint: http://DevLab.Jaeger:14268/api/traces
 app:
   shorten:
     host: "https://mo/s"

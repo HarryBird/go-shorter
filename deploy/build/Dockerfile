@@ -1,4 +1,4 @@
-FROM golang:1.16 AS builder
+FROM golang:1.17 AS builder
 
 ARG APP_NAME
 ARG APP_ENV
@@ -6,8 +6,8 @@ ARG APP_ENV
 COPY . /src
 WORKDIR /src/app/${APP_NAME}
 
-# RUN GOPROXY=https://goproxy.cn make clean && make build
-RUN GOPROXY=http://DevLab.GoProxy:19081 make clean && make build
+# RUN export GOPROXY=https://goproxy.cn  make clean && make build
+RUN go env -w GOPROXY=https://goproxy.cn  && make clean && make build
 
 # ==============================================================
 

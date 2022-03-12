@@ -8,21 +8,25 @@ import (
 	v1 "github.com/HarryBird/url-shorten/api/gateway/v1"
 	"github.com/HarryBird/url-shorten/app/gateway/internal/conf"
 	"github.com/HarryBird/url-shorten/app/gateway/internal/service"
+	tracesdk "go.opentelemetry.io/otel/sdk/trace"
 
 	prom "github.com/go-kratos/kratos/contrib/metrics/prometheus/v2"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/middleware/logging"
 	"github.com/go-kratos/kratos/v2/middleware/metrics"
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
+	"github.com/go-kratos/kratos/v2/middleware/tracing"
 	"github.com/go-kratos/kratos/v2/middleware/validate"
 	"github.com/go-kratos/kratos/v2/transport/http"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 // NewHTTPServer new a HTTP server.
-func NewHTTPServer(c *conf.Server, serv *service.GatewayService, logger log.Logger) *http.Server {
+func NewHTTPServer(c *conf.Server, tp *tracesdk.TracerProvider, serv *service.GatewayService, logger log.Logger) *http.Server {
 	opts := []http.ServerOption{
 		http.Middleware(
+			tracing.Server(
+				tracing.WithTracerProvider(tp)),
 			recovery.Recovery(),
 			logging.Server(logger),
 			validate.Validator(),

@@ -14,12 +14,13 @@ import (
 	"github.com/HarryBird/url-shorten/app/shorten/internal/service"
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"
+	"go.opentelemetry.io/otel/sdk/trace"
 )
 
 // Injectors from wire.go:
 
 // initApp init kratos application.
-func initApp(confServer *conf.Server, confData *conf.Data, registry *conf.Registry, logger log.Logger) (*kratos.App, func(), error) {
+func initApp(confServer *conf.Server, confData *conf.Data, registry *conf.Registry, tracerProvider *trace.TracerProvider, logger log.Logger) (*kratos.App, func(), error) {
 	db := data.NewDB(confData, logger)
 	client := data.NewRedis(confData, logger)
 	dataData, cleanup, err := data.NewData(db, client, logger)
@@ -29,7 +30,7 @@ func initApp(confServer *conf.Server, confData *conf.Data, registry *conf.Regist
 	shortenRepo := data.NewShortenRepo(dataData, logger)
 	shortenCase := biz.NewShortenCase(shortenRepo, logger)
 	shortenService := service.NewShortenService(shortenCase, logger)
-	grpcServer := server.NewGRPCServer(confServer, shortenService, logger)
+	grpcServer := server.NewGRPCServer(confServer, tracerProvider, shortenService, logger)
 	registrar := server.NewRegistrar(registry)
 	app := newApp(logger, grpcServer, registrar)
 	return app, func() {

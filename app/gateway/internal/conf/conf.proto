@@ -8,8 +8,9 @@ import "google/protobuf/duration.proto";
 message Bootstrap {
   Server server = 1;
   Data data = 2;
-  App app =3;
-  Registry registry=4;
+  Registry registry=3;
+  Trace trace=4;
+  App app =5;
 }
 
 message Server {
@@ -74,4 +75,8 @@ message App {
     }
 
     Shorten shorten = 1;
+}
+
+message Trace {
+    string endpoint = 1;
 }

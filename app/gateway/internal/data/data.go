@@ -15,11 +15,13 @@ import (
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/middleware/logging"
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
+	"github.com/go-kratos/kratos/v2/middleware/tracing"
 	"github.com/go-kratos/kratos/v2/middleware/validate"
 	"github.com/go-kratos/kratos/v2/registry"
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 	redis "github.com/go-redis/redis/v8"
 	"github.com/google/wire"
+	tracesdk "go.opentelemetry.io/otel/sdk/trace"
 )
 
 // ProviderSet is data providers.
@@ -69,7 +71,7 @@ type Data struct {
 	log *log.Helper
 }
 
-func NewShortenServiceClient(r registry.Discovery, logger log.Logger) sv1.ShortenClient {
+func NewShortenServiceClient(r registry.Discovery, tp *tracesdk.TracerProvider, logger log.Logger) sv1.ShortenClient {
 	conn, err := grpc.DialInsecure(
 		context.Background(),
 		// grpc.WithEndpoint("http://127.0.0.1:9100"),
@@ -77,6 +79,7 @@ func NewShortenServiceClient(r registry.Discovery, logger log.Logger) sv1.Shorte
 		grpc.WithEndpoint("discovery:///urlshorten.service.shorten.grpc"),
 		grpc.WithDiscovery(r),
 		grpc.WithMiddleware(
+			tracing.Client(tracing.WithTracerProvider(tp)),
 			recovery.Recovery(),
 			logging.Client(logger),
 			validate.Validator(),

@@ -5,6 +5,10 @@ import (
 	"os"
 
 	"github.com/HarryBird/url-shorten/app/gateway/internal/conf"
+	"go.opentelemetry.io/otel/exporters/jaeger"
+	"go.opentelemetry.io/otel/sdk/resource"
+	tracesdk "go.opentelemetry.io/otel/sdk/trace"
+	semconv "go.opentelemetry.io/otel/semconv/v1.4.0"
 
 	mzap "github.com/HarryBird/mo-kit/log/zap"
 	zlog "github.com/go-kratos/kratos/contrib/log/zap/v2"
@@ -82,7 +86,19 @@ func main() {
 
 	slog.Infof("bootstrap config: %+v", bc.App)
 
-	app, cleanup, err := initApp(bc.Server, bc.Data, bc.App, bc.Registry, logger)
+	exp, err := jaeger.New(jaeger.WithCollectorEndpoint(jaeger.WithEndpoint(bc.Trace.Endpoint)))
+	if err != nil {
+		panic(err)
+	}
+
+	tp := tracesdk.NewTracerProvider(
+		tracesdk.WithBatcher(exp),
+		tracesdk.WithResource(resource.NewSchemaless(
+			semconv.ServiceNameKey.String(Name),
+		)),
+	)
+
+	app, cleanup, err := initApp(bc.Server, bc.Data, bc.App, bc.Registry, tp, logger)
 	if err != nil {
 		panic(err)
 	}
