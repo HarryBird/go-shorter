@@ -35,6 +35,7 @@ trace:
   endpoint: http://127.0.0.1:14268/api/traces
 app:
   runtime:
-    env: "${MO_APP_ENV:LOCAL}"
+    # read MO_APP_ENV
+    env: "${APP_ENV:LOCAL}"
   shorten:
     host: "https://mo/s"

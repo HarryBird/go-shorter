@@ -34,5 +34,8 @@ registry:
 trace:
   endpoint: http://DevLab.Jaeger:14268/api/traces
 app:
+  runtime:
+    # read MO_APP_ENV
+    env: "${APP_ENV:LOCAL}"
   shorten:
     host: "https://mo/s"

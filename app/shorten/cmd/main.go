@@ -10,6 +10,7 @@ import (
 	zlog "github.com/go-kratos/kratos/contrib/log/zap/v2"
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/config"
+	"github.com/go-kratos/kratos/v2/config/env"
 	"github.com/go-kratos/kratos/v2/config/file"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/middleware/tracing"
@@ -64,6 +65,7 @@ func main() {
 	)
 	c := config.New(
 		config.WithSource(
+			env.NewSource("MO_"),
 			file.NewSource(flagconf),
 		),
 	)

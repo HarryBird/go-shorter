@@ -7,7 +7,7 @@ go 1.17
 // replace github.com/HarryBird/mo-kit => /Users/harry/Code/practice/mo-kit
 
 require (
-	github.com/HarryBird/mo-kit v0.0.0-20220307093049-11709689cc50
+	github.com/HarryBird/mo-kit v0.0.0-20220314073707-d9789f591a2f
 	github.com/envoyproxy/protoc-gen-validate v0.6.3
 	github.com/go-kratos/kratos/contrib/log/zap/v2 v2.0.0-20220215033000-471a2aab794b
 	github.com/go-kratos/kratos/contrib/metrics/prometheus/v2 v2.0.0-20220301141459-ed6ab7caf9ca
@@ -16,7 +16,6 @@ require (
 	github.com/go-redis/redis/v8 v8.11.4
 	github.com/google/wire v0.5.0
 	github.com/jxskiss/base62 v1.1.0
-	github.com/nacos-group/nacos-sdk-go v1.1.1
 	github.com/pkg/errors v0.9.1
 	github.com/prometheus/client_golang v1.12.1
 	github.com/spaolacci/murmur3 v1.1.0
@@ -56,6 +55,7 @@ require (
 	github.com/matttproud/golang_protobuf_extensions v1.0.1 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
+	github.com/nacos-group/nacos-sdk-go v1.1.1 // indirect
 	github.com/prometheus/client_model v0.2.0 // indirect
 	github.com/prometheus/common v0.32.1 // indirect
 	github.com/prometheus/procfs v0.7.3 // indirect

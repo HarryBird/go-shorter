@@ -42,5 +42,6 @@ registry:
 trace:
   endpoint: http://DevLab.Jaeger:14268/api/traces
 app:
-  run:
-    env: "${MO_APP_ENV:LOCAL}"
+  runtime:
+    # read MO_APP_ENV
+    env: "${APP_ENV:LOCAL}"

@@ -3,6 +3,7 @@ FROM golang:1.17 AS builder
 ARG APP_NAME
 ARG APP_TYPE
 ARG APP_ENV
+ENV MO_APP_ENV ${APP_ENV}
 
 COPY . /src
 WORKDIR /src/app/${APP_NAME}
