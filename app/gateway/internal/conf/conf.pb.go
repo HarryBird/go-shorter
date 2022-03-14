@@ -262,7 +262,8 @@ type App struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Shorten *App_Shorten `protobuf:"bytes,1,opt,name=shorten,proto3" json:"shorten,omitempty"`
+	Runtime *App_Runtime `protobuf:"bytes,1,opt,name=runtime,proto3" json:"runtime,omitempty"`
+	Shorten *App_Shorten `protobuf:"bytes,2,opt,name=shorten,proto3" json:"shorten,omitempty"`
 }
 
 func (x *App) Reset() {
@@ -295,6 +296,13 @@ func (x *App) ProtoReflect() protoreflect.Message {
 // Deprecated: Use App.ProtoReflect.Descriptor instead.
 func (*App) Descriptor() ([]byte, []int) {
 	return file_internal_conf_conf_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *App) GetRuntime() *App_Runtime {
+	if x != nil {
+		return x.Runtime
+	}
+	return nil
 }
 
 func (x *App) GetShorten() *App_Shorten {
@@ -864,6 +872,53 @@ func (x *App_Shorten) GetHost() string {
 	return ""
 }
 
+type App_Runtime struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Env string `protobuf:"bytes,1,opt,name=env,proto3" json:"env,omitempty"`
+}
+
+func (x *App_Runtime) Reset() {
+	*x = App_Runtime{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_internal_conf_conf_proto_msgTypes[13]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *App_Runtime) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*App_Runtime) ProtoMessage() {}
+
+func (x *App_Runtime) ProtoReflect() protoreflect.Message {
+	mi := &file_internal_conf_conf_proto_msgTypes[13]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use App_Runtime.ProtoReflect.Descriptor instead.
+func (*App_Runtime) Descriptor() ([]byte, []int) {
+	return file_internal_conf_conf_proto_rawDescGZIP(), []int{4, 1}
+}
+
+func (x *App_Runtime) GetEnv() string {
+	if x != nil {
+		return x.Env
+	}
+	return ""
+}
+
 var File_internal_conf_conf_proto protoreflect.FileDescriptor
 
 var file_internal_conf_conf_proto_rawDesc = []byte{
@@ -960,13 +1015,18 @@ var file_internal_conf_conf_proto_rawDesc = []byte{
 	0x74, 0x12, 0x16, 0x0a, 0x06, 0x73, 0x63, 0x68, 0x65, 0x6d, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28,
 	0x09, 0x52, 0x06, 0x73, 0x63, 0x68, 0x65, 0x6d, 0x65, 0x12, 0x21, 0x0a, 0x0c, 0x63, 0x6f, 0x6e,
 	0x74, 0x65, 0x78, 0x74, 0x5f, 0x70, 0x61, 0x74, 0x68, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52,
-	0x0b, 0x63, 0x6f, 0x6e, 0x74, 0x65, 0x78, 0x74, 0x50, 0x61, 0x74, 0x68, 0x22, 0x56, 0x0a, 0x03,
-	0x41, 0x70, 0x70, 0x12, 0x30, 0x0a, 0x07, 0x73, 0x68, 0x6f, 0x72, 0x74, 0x65, 0x6e, 0x18, 0x01,
-	0x20, 0x01, 0x28, 0x0b, 0x32, 0x16, 0x2e, 0x6d, 0x6f, 0x77, 0x65, 0x6e, 0x2e, 0x61, 0x70, 0x69,
-	0x2e, 0x41, 0x70, 0x70, 0x2e, 0x53, 0x68, 0x6f, 0x72, 0x74, 0x65, 0x6e, 0x52, 0x07, 0x73, 0x68,
-	0x6f, 0x72, 0x74, 0x65, 0x6e, 0x1a, 0x1d, 0x0a, 0x07, 0x53, 0x68, 0x6f, 0x72, 0x74, 0x65, 0x6e,
-	0x12, 0x12, 0x0a, 0x04, 0x68, 0x6f, 0x73, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04,
-	0x68, 0x6f, 0x73, 0x74, 0x22, 0x23, 0x0a, 0x05, 0x54, 0x72, 0x61, 0x63, 0x65, 0x12, 0x1a, 0x0a,
+	0x0b, 0x63, 0x6f, 0x6e, 0x74, 0x65, 0x78, 0x74, 0x50, 0x61, 0x74, 0x68, 0x22, 0xa5, 0x01, 0x0a,
+	0x03, 0x41, 0x70, 0x70, 0x12, 0x30, 0x0a, 0x07, 0x72, 0x75, 0x6e, 0x74, 0x69, 0x6d, 0x65, 0x18,
+	0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x16, 0x2e, 0x6d, 0x6f, 0x77, 0x65, 0x6e, 0x2e, 0x61, 0x70,
+	0x69, 0x2e, 0x41, 0x70, 0x70, 0x2e, 0x52, 0x75, 0x6e, 0x74, 0x69, 0x6d, 0x65, 0x52, 0x07, 0x72,
+	0x75, 0x6e, 0x74, 0x69, 0x6d, 0x65, 0x12, 0x30, 0x0a, 0x07, 0x73, 0x68, 0x6f, 0x72, 0x74, 0x65,
+	0x6e, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x16, 0x2e, 0x6d, 0x6f, 0x77, 0x65, 0x6e, 0x2e,
+	0x61, 0x70, 0x69, 0x2e, 0x41, 0x70, 0x70, 0x2e, 0x53, 0x68, 0x6f, 0x72, 0x74, 0x65, 0x6e, 0x52,
+	0x07, 0x73, 0x68, 0x6f, 0x72, 0x74, 0x65, 0x6e, 0x1a, 0x1d, 0x0a, 0x07, 0x53, 0x68, 0x6f, 0x72,
+	0x74, 0x65, 0x6e, 0x12, 0x12, 0x0a, 0x04, 0x68, 0x6f, 0x73, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28,
+	0x09, 0x52, 0x04, 0x68, 0x6f, 0x73, 0x74, 0x1a, 0x1b, 0x0a, 0x07, 0x52, 0x75, 0x6e, 0x74, 0x69,
+	0x6d, 0x65, 0x12, 0x10, 0x0a, 0x03, 0x65, 0x6e, 0x76, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52,
+	0x03, 0x65, 0x6e, 0x76, 0x22, 0x23, 0x0a, 0x05, 0x54, 0x72, 0x61, 0x63, 0x65, 0x12, 0x1a, 0x0a,
 	0x08, 0x65, 0x6e, 0x64, 0x70, 0x6f, 0x69, 0x6e, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52,
 	0x08, 0x65, 0x6e, 0x64, 0x70, 0x6f, 0x69, 0x6e, 0x74, 0x42, 0x2c, 0x5a, 0x2a, 0x75, 0x72, 0x6c,
 	0x2d, 0x73, 0x68, 0x6f, 0x72, 0x74, 0x65, 0x6e, 0x2f, 0x61, 0x70, 0x70, 0x2f, 0x67, 0x61, 0x74,
@@ -986,7 +1046,7 @@ func file_internal_conf_conf_proto_rawDescGZIP() []byte {
 	return file_internal_conf_conf_proto_rawDescData
 }
 
-var file_internal_conf_conf_proto_msgTypes = make([]protoimpl.MessageInfo, 13)
+var file_internal_conf_conf_proto_msgTypes = make([]protoimpl.MessageInfo, 14)
 var file_internal_conf_conf_proto_goTypes = []interface{}{
 	(*Bootstrap)(nil),           // 0: mowen.api.Bootstrap
 	(*Server)(nil),              // 1: mowen.api.Server
@@ -1001,7 +1061,8 @@ var file_internal_conf_conf_proto_goTypes = []interface{}{
 	(*Data_Database_Pool)(nil),  // 10: mowen.api.Data.Database.Pool
 	(*Registry_Nacos)(nil),      // 11: mowen.api.Registry.Nacos
 	(*App_Shorten)(nil),         // 12: mowen.api.App.Shorten
-	(*durationpb.Duration)(nil), // 13: google.protobuf.Duration
+	(*App_Runtime)(nil),         // 13: mowen.api.App.Runtime
+	(*durationpb.Duration)(nil), // 14: google.protobuf.Duration
 }
 var file_internal_conf_conf_proto_depIdxs = []int32{
 	1,  // 0: mowen.api.Bootstrap.server:type_name -> mowen.api.Server
@@ -1014,15 +1075,16 @@ var file_internal_conf_conf_proto_depIdxs = []int32{
 	8,  // 7: mowen.api.Data.database:type_name -> mowen.api.Data.Database
 	9,  // 8: mowen.api.Data.redis:type_name -> mowen.api.Data.Redis
 	11, // 9: mowen.api.Registry.nacos:type_name -> mowen.api.Registry.Nacos
-	12, // 10: mowen.api.App.shorten:type_name -> mowen.api.App.Shorten
-	13, // 11: mowen.api.Server.HTTP.timeout:type_name -> google.protobuf.Duration
-	13, // 12: mowen.api.Server.GRPC.timeout:type_name -> google.protobuf.Duration
-	10, // 13: mowen.api.Data.Database.pool:type_name -> mowen.api.Data.Database.Pool
-	14, // [14:14] is the sub-list for method output_type
-	14, // [14:14] is the sub-list for method input_type
-	14, // [14:14] is the sub-list for extension type_name
-	14, // [14:14] is the sub-list for extension extendee
-	0,  // [0:14] is the sub-list for field type_name
+	13, // 10: mowen.api.App.runtime:type_name -> mowen.api.App.Runtime
+	12, // 11: mowen.api.App.shorten:type_name -> mowen.api.App.Shorten
+	14, // 12: mowen.api.Server.HTTP.timeout:type_name -> google.protobuf.Duration
+	14, // 13: mowen.api.Server.GRPC.timeout:type_name -> google.protobuf.Duration
+	10, // 14: mowen.api.Data.Database.pool:type_name -> mowen.api.Data.Database.Pool
+	15, // [15:15] is the sub-list for method output_type
+	15, // [15:15] is the sub-list for method input_type
+	15, // [15:15] is the sub-list for extension type_name
+	15, // [15:15] is the sub-list for extension extendee
+	0,  // [0:15] is the sub-list for field type_name
 }
 
 func init() { file_internal_conf_conf_proto_init() }
@@ -1187,6 +1249,18 @@ func file_internal_conf_conf_proto_init() {
 				return nil
 			}
 		}
+		file_internal_conf_conf_proto_msgTypes[13].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*App_Runtime); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -1194,7 +1268,7 @@ func file_internal_conf_conf_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_internal_conf_conf_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   13,
+			NumMessages:   14,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

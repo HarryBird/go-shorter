@@ -1,6 +1,7 @@
 FROM golang:1.17 AS builder
 
 ARG APP_NAME
+ARG APP_TYPE
 ARG APP_ENV
 
 COPY . /src
@@ -14,8 +15,9 @@ RUN go env -w GOPROXY=https://goproxy.cn  && make clean && make build
 FROM debian:stable-slim
 
 ARG APP_NAME
+ARG APP_TYPE
 ARG APP_ENV
-ENV MO_APP_NAME url-shorten.${APP_NAME}
+ENV MO_APP_NAME urlshorten.${APP_TYPE}.${APP_NAME}
 ENV MO_APP_ENV ${APP_ENV}
 
 RUN apt-get update && apt-get install -y --no-install-recommends \

@@ -41,3 +41,6 @@ registry:
     context_path: /nacos
 trace:
   endpoint: http://DevLab.Jaeger:14268/api/traces
+app:
+  run:
+    env: "${MO_APP_ENV:LOCAL}"

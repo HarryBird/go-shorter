@@ -7,6 +7,7 @@ services:
       dockerfile: deploy/build/Dockerfile
       args:
         APP_NAME: shorten
+        APP_TYPE: service
         APP_ENV: DevLab
     container_name: DevLab.urlshorten.shorten
     hostname: mo.urlshorten.shorten
@@ -21,6 +22,7 @@ services:
       dockerfile: deploy/build/Dockerfile
       args:
         APP_NAME: gateway
+        APP_TYPE: service
         APP_ENV: DevLab
     container_name: DevLab.urlshorten.gateway
     depends_on:

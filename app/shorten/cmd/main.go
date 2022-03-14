@@ -73,17 +73,14 @@ func main() {
 		panic(err)
 	}
 
-	// slog := log.NewHelper(log.With(logger, "mod", "bootstrap"))
-	// vv, _ := c.Value("data.redis.pool_timeout").Duration()
-	// slog.Infof("config: %+v", vv)
-
 	var bc conf.Bootstrap
 	if err := c.Scan(&bc); err != nil {
 		panic(err)
 	}
 
-	// slog.Infof("bootstrap config: %+v", bc)
-	//
+	slog := log.NewHelper(log.With(logger, "mod", "bootstrap"))
+	slog.Infof("%s starting..., with config: server=%+v, data=%+v, registry=%+v, app=%+v", Name, bc.Server, bc.Data, bc.Registry, bc.App)
+
 	exp, err := jaeger.New(jaeger.WithCollectorEndpoint(jaeger.WithEndpoint(bc.Trace.Endpoint)))
 	if err != nil {
 		panic(err)
@@ -96,7 +93,7 @@ func main() {
 		)),
 	)
 
-	app, cleanup, err := initApp(bc.Server, bc.Data, bc.Registry, tp, logger)
+	app, cleanup, err := initApp(bc.Server, bc.Data, bc.Registry, bc.App, tp, logger)
 	if err != nil {
 		panic(err)
 	}

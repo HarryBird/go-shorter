@@ -74,7 +74,12 @@ message App {
         string host = 1;
     }
 
-    Shorten shorten = 1;
+    message Runtime {
+        string env = 1;
+    }
+
+    Runtime runtime = 1;
+    Shorten shorten = 2;
 }
 
 message Trace {

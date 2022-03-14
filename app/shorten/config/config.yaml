@@ -41,4 +41,6 @@ registry:
     context_path: /nacos
 trace:
   endpoint: http://127.0.0.1:14268/api/traces
-
+app:
+  runtime:
+    env: "${MO_APP_ENV:LOCAL}"

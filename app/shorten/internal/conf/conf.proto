@@ -10,6 +10,7 @@ message Bootstrap {
   Data data = 2;
   Registry registry=3;
   Trace trace=4;
+  App app=5;
 }
 
 message Server {
@@ -70,4 +71,12 @@ message Registry {
 
 message Trace {
     string endpoint = 1;
+}
+
+message App {
+    message Runtime {
+        string env = 1;
+    }
+
+    Runtime runtime = 1;
 }
