@@ -5,12 +5,9 @@ import (
 	"os"
 
 	"github.com/HarryBird/url-shorten/app/gateway/internal/conf"
-	"go.opentelemetry.io/otel/exporters/jaeger"
-	"go.opentelemetry.io/otel/sdk/resource"
-	tracesdk "go.opentelemetry.io/otel/sdk/trace"
-	semconv "go.opentelemetry.io/otel/semconv/v1.4.0"
 
-	mzap "github.com/HarryBird/mo-kit/log/zap"
+	moZap "github.com/HarryBird/mo-kit/log/zap"
+	moJaeger "github.com/HarryBird/mo-kit/trace/jaeger"
 	zlog "github.com/go-kratos/kratos/contrib/log/zap/v2"
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/config"
@@ -35,6 +32,10 @@ var (
 	id, _ = os.Hostname()
 )
 
+const (
+	EnvVarPrefix = "MO_"
+)
+
 func init() {
 	flag.StringVar(&flagconf, "conf", "../config", "config path, eg: -conf config.yaml")
 }
@@ -56,7 +57,7 @@ func newApp(logger log.Logger, hs *http.Server, gs *grpc.Server, rr registry.Reg
 
 func main() {
 	flag.Parse()
-	logger := log.With(zlog.NewLogger(mzap.DevelopmentLogger()),
+	logger := log.With(zlog.NewLogger(moZap.DevelopmentLogger()),
 		// "ts", log.DefaultTimestamp,
 		// "caller", log.DefaultCaller,
 		"service.id", id,
@@ -65,9 +66,14 @@ func main() {
 		"trace_id", tracing.TraceID(),
 		"span_id", tracing.SpanID(),
 	)
+
+	slog := log.NewHelper(log.With(logger, "mod", "main.bootstrap"))
+	slog.Infof("%s service starting...", Name)
+
+	// init config
 	c := config.New(
 		config.WithSource(
-			env.NewSource("MO_"),
+			env.NewSource(EnvVarPrefix),
 			file.NewSource(flagconf),
 		),
 	)
@@ -82,21 +88,15 @@ func main() {
 		panic(err)
 	}
 
-	slog := log.NewHelper(log.With(logger, "mod", "bootstrap"))
-	slog.Infof("%s starting..., with config: server=%+v, data=%+v, registry=%+v, app=%+v", Name, bc.Server, bc.Data, bc.Registry, bc.App)
+	slog.Infof("with config: server=%+v, data=%+v, registry=%+v, app=%+v", bc.Server, bc.Data, bc.Registry, bc.App)
 
-	exp, err := jaeger.New(jaeger.WithCollectorEndpoint(jaeger.WithEndpoint(bc.Trace.Endpoint)))
+	// init tracing
+	tp, err := moJaeger.DefaultProvider(Name, bc.Trace)
 	if err != nil {
 		panic(err)
 	}
 
-	tp := tracesdk.NewTracerProvider(
-		tracesdk.WithBatcher(exp),
-		tracesdk.WithResource(resource.NewSchemaless(
-			semconv.ServiceNameKey.String(Name),
-		)),
-	)
-
+	// init app
 	app, cleanup, err := initApp(bc.Server, bc.Data, bc.Registry, bc.App, tp, logger)
 	if err != nil {
 		panic(err)

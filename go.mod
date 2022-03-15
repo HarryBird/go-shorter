@@ -7,7 +7,7 @@ go 1.17
 // replace github.com/HarryBird/mo-kit => /Users/harry/Code/practice/mo-kit
 
 require (
-	github.com/HarryBird/mo-kit v0.0.0-20220314073707-d9789f591a2f
+	github.com/HarryBird/mo-kit v0.0.0-20220315051552-77ac2395e454
 	github.com/envoyproxy/protoc-gen-validate v0.6.3
 	github.com/go-kratos/kratos/contrib/log/zap/v2 v2.0.0-20220215033000-471a2aab794b
 	github.com/go-kratos/kratos/contrib/metrics/prometheus/v2 v2.0.0-20220301141459-ed6ab7caf9ca

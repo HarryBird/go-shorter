@@ -71,6 +71,8 @@ message Registry {
 
 message Trace {
     string endpoint = 1;
+    string username = 2;
+    string password = 3;
 }
 
 message App {
